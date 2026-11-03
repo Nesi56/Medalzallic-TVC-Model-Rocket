@@ -1,0 +1,14 @@
+# desktop simulator build output
+tools/desktop_sim/build/
+
+# Arduino build output
+build/
+*.hex
+*.elf
+*.bin
+
+# editors and OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
