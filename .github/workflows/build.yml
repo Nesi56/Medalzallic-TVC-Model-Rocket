@@ -1,0 +1,55 @@
+# Runs on every push and pull request:
+#   - flies the built-in simulator on a PC (tools/desktop_sim/run.sh)
+#   - compiles the flight code for a real Teensy 4.1, in both SIM_MODE 1 and 0
+#   - compiles the ESP32 ground-link sketch
+name: build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  desktop-sim:
+    name: Simulated flights
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and fly
+        run: bash tools/desktop_sim/run.sh --quick
+
+  teensy:
+    name: Teensy 4.1 compile
+    runs-on: ubuntu-latest
+    env:
+      TEENSY_URL: https://www.pjrc.com/teensy/package_teensy_index.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install the Teensy core
+        run: |
+          arduino-cli core update-index --additional-urls "$TEENSY_URL"
+          arduino-cli core install teensy:avr --additional-urls "$TEENSY_URL"
+      - name: Compile with SIM_MODE 1 (as committed)
+        run: arduino-cli compile --fqbn teensy:avr:teensy41 --warnings default TVC_Flight_Computer
+      - name: Compile with SIM_MODE 0 (real hardware)
+        run: |
+          mkdir -p hw && cp -r TVC_Flight_Computer hw/
+          sed -i 's/^#define SIM_MODE 1/#define SIM_MODE 0/' hw/TVC_Flight_Computer/config.h
+          grep -q '^#define SIM_MODE 0' hw/TVC_Flight_Computer/config.h
+          arduino-cli compile --fqbn teensy:avr:teensy41 --warnings default hw/TVC_Flight_Computer
+
+  esp32:
+    name: ESP32 ground link compile
+    runs-on: ubuntu-latest
+    env:
+      ESP32_URL: https://espressif.github.io/arduino-esp32/package_esp32_index.json
+    steps:
+      - uses: actions/checkout@v4
+      - uses: arduino/setup-arduino-cli@v2
+      - name: Install the ESP32 core
+        run: |
+          arduino-cli core update-index --additional-urls "$ESP32_URL"
+          arduino-cli core install esp32:esp32 --additional-urls "$ESP32_URL"
+      - name: Compile
+        run: arduino-cli compile --fqbn esp32:esp32:esp32 ESP32_Ground_Link
