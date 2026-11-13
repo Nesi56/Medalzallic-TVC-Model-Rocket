@@ -1,0 +1,1322 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+</head>
+<body>
+<title>TVC Code Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+/* Layout: an engineering drawing sheet. Title block up top, sticky section rail,
+   one reading column (~68ch) with full-width figure rows up to 1160px. */
+:root {
+  --paper: #f2f4f6;
+  --sheet: #fbfcfd;
+  --ink: #16202c;
+  --ink-2: #485465;
+  --ink-3: #6f7b8a;
+  --rule: #d3dae2;
+  --rule-2: #e4e9ee;
+  --grid: rgba(31, 95, 191, 0.045);
+  --accent: #1f5fbf;
+  --accent-wash: #e1eaf8;
+  --danger: #b8322a;
+  --danger-wash: #f9e6e4;
+  --band-tvc: rgba(31, 95, 191, 0.08);
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --edge: #8a95a3;
+  --code-bg: #eef1f4;
+  --font-display: "Barlow Semi Condensed", "Arial Narrow", "Helvetica Neue", sans-serif;
+  --font-body: "IBM Plex Sans", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0e141a; --sheet: #151d26; --ink: #e4eaf0; --ink-2: #aab5c2; --ink-3: #7f8a98;
+    --rule: #2b3643; --rule-2: #1f2832; --grid: rgba(106, 165, 242, 0.05);
+    --accent: #6aa5f2; --accent-wash: #182739; --danger: #ee6c62; --danger-wash: #3a1e1c;
+    --band-tvc: rgba(106, 165, 242, 0.10); --series-1: #3987e5; --series-2: #d95926;
+    --edge: #6a7584; --code-bg: #1b242e; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0e141a; --sheet: #151d26; --ink: #e4eaf0; --ink-2: #aab5c2; --ink-3: #7f8a98;
+  --rule: #2b3643; --rule-2: #1f2832; --grid: rgba(106, 165, 242, 0.05);
+  --accent: #6aa5f2; --accent-wash: #182739; --danger: #ee6c62; --danger-wash: #3a1e1c;
+  --band-tvc: rgba(106, 165, 242, 0.10); --series-1: #3987e5; --series-2: #d95926;
+  --edge: #6a7584; --code-bg: #1b242e; color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background-color: var(--paper);
+  background-image: linear-gradient(var(--grid) 1px, transparent 1px), linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 24px 24px;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+}
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.wrap {
+  max-width: 1160px;
+  margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; line-height: 1.1; margin: 0; letter-spacing: 0.005em; }
+h2 { font-size: 2rem; font-weight: 700; }
+h3 { font-size: 1.35rem; font-weight: 600; }
+p { margin: 0; }
+code, .mono { font-family: var(--font-mono); font-size: 0.88em; }
+:not(pre) > code { background: var(--code-bg); padding: 0.08em 0.35em; border-radius: 3px; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------- title block ---------- */
+.masthead { padding-block: 40px 28px; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 420px); gap: 32px; align-items: end; }
+.masthead .eyebrow { font-family: var(--font-mono); font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.masthead h1 { font-size: clamp(2.6rem, 6vw, 4.2rem); font-weight: 700; margin-top: 6px; }
+.masthead .lede { margin-top: 14px; max-width: 60ch; color: var(--ink-2); font-size: 1.05rem; }
+.titleblock { border: 1.5px solid var(--ink); background: var(--sheet); font-size: 0.82rem; display: grid; grid-template-columns: auto minmax(0, 1fr); }
+.titleblock div { padding: 6px 10px; border-bottom: 1px solid var(--rule); min-width: 0; }
+.titleblock div:nth-child(odd) { font-family: var(--font-mono); font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); border-right: 1px solid var(--rule); white-space: nowrap; }
+.titleblock div:nth-last-child(-n+2) { border-bottom: 0; }
+@media (max-width: 820px) { .masthead { grid-template-columns: minmax(0, 1fr); } }
+
+/* ---------- section rail ---------- */
+.rail { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-block: 1px solid var(--rule); }
+.rail ol { list-style: none; margin: 0; padding: 0; display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; }
+.rail a { display: block; white-space: nowrap; padding: 10px 10px; font-size: 0.85rem; color: var(--ink-2); text-decoration: none; border-bottom: 2px solid transparent; }
+.rail a:hover { color: var(--ink); }
+.rail a.on { color: var(--accent); border-bottom-color: var(--accent); }
+
+/* ---------- sections ---------- */
+section { padding-block: 56px 8px; scroll-margin-top: 56px; }
+.sec-head { display: grid; gap: 12px; max-width: 72ch; }
+.sec-head .tag { font-family: var(--font-mono); font-size: 0.72rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); }
+.prose { display: grid; gap: 14px; max-width: 70ch; margin-top: 18px; color: var(--ink); }
+.prose.muted, .muted { color: var(--ink-2); }
+.subsec { margin-top: 44px; display: grid; gap: 14px; }
+.prose, .sec-head, .subsec, ol.steps { grid-template-columns: minmax(0, 1fr); }
+.prose > *, .subsec > *, ol.steps > li { min-width: 0; }
+:not(pre):not(td) > code { overflow-wrap: anywhere; }
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+@media (max-width: 860px) { .two { grid-template-columns: minmax(0, 1fr); } }
+
+figure { margin: 24px 0 0; }
+.figbox { position: relative; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; }
+.mono-t { font-family: var(--font-mono); }
+.scroll { overflow-x: auto; }
+.scroll > svg.diagram { min-width: 900px; }
+svg.diagram { display: block; width: 100%; height: auto; color: var(--ink); font-family: var(--font-body); }
+figcaption { margin-top: 10px; font-size: 0.88rem; color: var(--ink-2); max-width: 80ch; }
+
+/* diagram parts */
+.node rect.box { fill: var(--sheet); stroke: var(--ink-2); stroke-width: 1.2; }
+.node.hw rect.box { fill: var(--paper); stroke-dasharray: none; }
+.node .nm { font-family: var(--font-mono); font-size: 12.5px; font-weight: 600; fill: var(--ink); }
+.node .sb { font-size: 11px; fill: var(--ink-3); }
+.node.click { cursor: pointer; }
+.node.click:hover rect.box { stroke: var(--accent); }
+.node.sel rect.box { stroke: var(--accent); stroke-width: 2.4; fill: var(--accent-wash); }
+.node.rel rect.box { stroke: var(--ink); stroke-width: 1.8; }
+.node.off { opacity: 0.28; }
+.edge path, .edge line { fill: none; stroke: var(--edge); stroke-width: 1.4; }
+.edge text, .el { font-size: 11px; fill: var(--ink-2); }
+.edge.on path, .edge.on line { stroke: var(--accent); stroke-width: 2; }
+.edge.on text { fill: var(--ink); font-weight: 600; }
+.edge.off { opacity: 0.2; }
+.ah path { fill: var(--edge); }
+.ah-on path { fill: var(--accent); }
+.colhead { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.12em; fill: var(--ink-3); }
+.found rect { fill: var(--code-bg); stroke: var(--rule); }
+.found .nm { font-family: var(--font-mono); font-size: 12px; font-weight: 600; fill: var(--ink); }
+.found .sb { font-size: 11px; fill: var(--ink-2); }
+.danger-ink { fill: var(--danger); }
+
+/* toggle */
+.toolbar { display: flex; flex-wrap: wrap; gap: 10px 18px; align-items: center; margin-top: 22px; }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 6px; overflow: hidden; background: var(--sheet); }
+.seg button { font: inherit; font-size: 0.85rem; padding: 7px 12px; border: 0; background: transparent; color: var(--ink-2); cursor: pointer; }
+.seg button + button { border-left: 1px solid var(--rule); }
+.seg button[aria-pressed="true"] { background: var(--accent-wash); color: var(--accent); font-weight: 600; }
+.hint { font-size: 0.85rem; color: var(--ink-3); }
+
+/* detail panel */
+.panel { margin-top: 16px; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 20px 22px; display: grid; grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr); gap: 8px 32px; }
+.panel h3 { font-family: var(--font-mono); font-size: 1.1rem; font-weight: 600; letter-spacing: 0; grid-column: 1 / -1; }
+.panel .role { grid-column: 1 / -1; color: var(--ink-2); margin-bottom: 8px; max-width: 80ch; }
+.panel h4 { margin: 10px 0 6px; font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+.panel ul { margin: 0; padding-left: 1.1em; display: grid; gap: 5px; font-size: 0.93rem; }
+.panel li code { font-size: 0.85em; }
+@media (max-width: 760px) { .panel { grid-template-columns: minmax(0, 1fr); } }
+
+/* loop pipeline */
+.pipe { list-style: none; margin: 24px 0 0; padding: 0; display: grid; gap: 0; counter-reset: step; max-width: 920px; }
+.pipe li { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: start; padding: 12px 0; border-top: 1px solid var(--rule); counter-increment: step; }
+.pipe li::before { content: counter(step, decimal-leading-zero); font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-3); padding-top: 3px; }
+.pipe .what { min-width: 0; }
+.pipe .what b { font-family: var(--font-mono); font-size: 0.9rem; font-weight: 600; }
+.pipe .what span { display: block; color: var(--ink-2); font-size: 0.93rem; }
+.pipe .meta { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; padding-top: 2px; }
+.chip { font-family: var(--font-mono); font-size: 0.72rem; padding: 2px 7px; border-radius: 4px; border: 1px solid var(--rule); color: var(--ink-2); background: var(--sheet); white-space: nowrap; }
+.chip.rate { border-color: transparent; background: var(--accent-wash); color: var(--accent); }
+@media (max-width: 640px) { .pipe li { grid-template-columns: 32px minmax(0, 1fr); } .pipe .meta { grid-column: 2; justify-content: flex-start; } }
+
+/* charts */
+.chart { position: relative; }
+.chart svg { display: block; width: 100%; font-family: var(--font-body); }
+.chart + .chart { margin-top: 6px; }
+.ctitle { display: flex; flex-wrap: wrap; gap: 4px 16px; align-items: baseline; margin: 4px 0 2px; }
+.ctitle b { font-size: 0.95rem; font-weight: 600; }
+.ctitle span { font-size: 0.82rem; color: var(--ink-3); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.82rem; color: var(--ink-2); }
+.legend i { display: inline-block; width: 16px; height: 2px; vertical-align: middle; margin-right: 6px; border-radius: 1px; }
+.k1 { background: var(--series-1); } .k2 { background: var(--series-2); }
+.legend .kb { width: 14px; height: 10px; background: var(--band-tvc); border: 1px solid var(--rule); }
+.grid line { stroke: var(--rule-2); stroke-width: 1; }
+.axis line { stroke: var(--rule); stroke-width: 1; }
+.axis text, .tick { font-size: 11px; fill: var(--ink-3); font-variant-numeric: tabular-nums; }
+.s1 { stroke: var(--series-1); } .s2 { stroke: var(--series-2); }
+.f1 { fill: var(--series-1); } .f2 { fill: var(--series-2); }
+.line { fill: none; stroke-width: 2; stroke-linejoin: round; stroke-linecap: round; }
+.band { fill: var(--band-tvc); }
+.bandlbl { font-family: var(--font-mono); font-size: 9.5px; letter-spacing: 0.06em; fill: var(--ink-3); }
+.evt { stroke: var(--rule); stroke-width: 1; }
+.evtlbl { font-size: 10.5px; fill: var(--ink-2); }
+.ann { font-size: 11.5px; fill: var(--ink); }
+.ann-sub { font-size: 10.5px; fill: var(--ink-3); }
+.leader { stroke: var(--ink-3); stroke-width: 1; fill: none; }
+.cursor { stroke: var(--ink-2); stroke-width: 1; }
+.dot-ring { fill: var(--sheet); }
+.tip { position: absolute; pointer-events: none; background: var(--sheet); border: 1px solid var(--rule); border-radius: 6px; padding: 8px 10px; font-size: 0.8rem; box-shadow: 0 4px 14px rgba(0,0,0,0.12); min-width: 170px; z-index: 3; }
+.tip .tt { font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-3); margin-bottom: 4px; }
+.tip .row { display: flex; align-items: center; gap: 8px; }
+.tip .row b { font-variant-numeric: tabular-nums; font-weight: 600; min-width: 58px; }
+.tip .row span { color: var(--ink-2); }
+.tip i { display: inline-block; width: 12px; height: 2px; border-radius: 1px; }
+
+table { border-collapse: collapse; width: 100%; font-size: 0.9rem; }
+.tablebox { overflow-x: auto; margin-top: 16px; }
+th, td { text-align: left; padding: 7px 10px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+th { font-family: var(--font-mono); font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); font-weight: 500; }
+td.num, th.num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+td code { white-space: nowrap; }
+details { margin-top: 14px; }
+summary { cursor: pointer; color: var(--accent); font-size: 0.9rem; }
+
+pre { margin: 0; background: var(--code-bg); border: 1px solid var(--rule); border-radius: 6px; padding: 12px 14px; overflow-x: auto; font-family: var(--font-mono); font-size: 0.82rem; line-height: 1.55; }
+.callout { border: 1px solid var(--rule); border-left: 3px solid var(--danger); background: var(--danger-wash); padding: 12px 16px; border-radius: 4px; max-width: 76ch; font-size: 0.95rem; }
+.callout b { color: var(--danger); }
+
+/* telemetry anatomy */
+.tline { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 16px; font-family: var(--font-mono); font-size: 0.82rem; }
+.tline div { border: 1px solid var(--rule); background: var(--sheet); border-radius: 4px; padding: 6px 8px; display: grid; gap: 2px; min-width: 0; }
+.tline div b { font-weight: 600; color: var(--ink); }
+.tline div span { font-family: var(--font-body); font-size: 0.72rem; color: var(--ink-3); }
+
+ol.steps { margin: 18px 0 0; padding-left: 1.4em; display: grid; gap: 10px; max-width: 74ch; }
+ol.steps li::marker { font-family: var(--font-mono); color: var(--ink-3); }
+footer { padding-block: 56px 48px; color: var(--ink-3); font-size: 0.85rem; }
+
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+</style>
+
+<div class="wrap">
+  <header class="masthead">
+    <div>
+      <div class="eyebrow">Flight computer · code guide</div>
+      <h1>TVC Code Map</h1>
+      <p class="lede">How the 13 files of your Teensy 4.1 flight computer talk to each other, what runs every 2 milliseconds, how the rocket moves from state to state, and what each piece of math is doing. Every chart on this page comes from a real run of the code's built-in simulator.</p>
+    </div>
+    <div class="titleblock" aria-label="Project summary">
+      <div>Project</div><div>Teensy 4.1 TVC lander, E16 up, E16 down</div>
+      <div>Flight code</div><div>13 files, 2,059 lines (<code>TVC_Flight_Computer/</code>)</div>
+      <div>Ground link</div><div>1 file, 174 lines (<code>ESP32_Ground_Link/</code>)</div>
+      <div>Main loop</div><div>500 Hz (every 2 ms), 14 flight states</div>
+      <div>Sheet</div><div>Rev A · 20 Oct 2026</div>
+    </div>
+  </header>
+</div>
+
+<nav class="rail" aria-label="Sections">
+  <div class="wrap">
+    <ol id="rail">
+      <li><a href="#files">Files</a></li>
+      <li><a href="#loop">The 2 ms loop</a></li>
+      <li><a href="#states">States</a></li>
+      <li><a href="#flight">A real flight</a></li>
+      <li><a href="#attitude">Tilt</a></li>
+      <li><a href="#altitude">Altitude</a></li>
+      <li><a href="#tvc">Gimbal control</a></li>
+      <li><a href="#landing">Landing timing</a></li>
+      <li><a href="#pyro">Pyro safety</a></li>
+      <li><a href="#messages">Messages</a></li>
+      <li><a href="#settings">Settings</a></li>
+      <li><a href="#reading">Reading order</a></li>
+      <li><a href="#arduino">Into Arduino</a></li>
+    </ol>
+  </div>
+</nav>
+
+<main class="wrap">
+
+<!-- ================= FILES ================= -->
+<section id="files">
+  <div class="sec-head">
+    <div class="tag">Structure</div>
+    <h2>How the files talk to each other</h2>
+  </div>
+  <div class="prose">
+    <p>The design is a hub with spokes. <code>TVC_Flight_Computer.ino</code> is the only file that makes decisions. Every <code>.h</code> file is a toolbox: it holds one job (read a sensor, estimate tilt, drive the servos, time the landing burn) and waits to be called. The headers never call each other's functions. They only share the settings in <code>config.h</code> and the math in <code>flight_types.h</code>.</p>
+    <p>So if you want to know <em>when</em> something happens, read the <code>.ino</code>. If you want to know <em>how</em> it's done, open the header it calls.</p>
+  </div>
+
+  <div class="toolbar">
+    <div class="seg" role="group" aria-label="Build mode">
+      <button type="button" id="mode-real" aria-pressed="false">SIM_MODE 0 · real hardware</button>
+      <button type="button" id="mode-sim" aria-pressed="true">SIM_MODE 1 · simulator</button>
+    </div>
+    <span class="hint">Click any box to see what's inside and what it talks to.</span>
+  </div>
+
+  <figure>
+    <div class="figbox scroll">
+      <svg class="diagram" id="filemap" viewBox="0 0 1120 640" role="img" aria-label="Hub-and-spoke map: TVC_Flight_Computer.ino in the centre calls the sensor drivers or the simulator, the two estimators, the four output modules, and talks to the USB port and the ESP32 ground link. config.h, flight_types.h and motor_curves.h sit underneath as shared foundations.">
+        <defs>
+          <marker id="ah" class="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="ahon" class="ah-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+
+        <text class="colhead" x="71" y="128" text-anchor="middle">SENSOR CHIPS</text>
+        <text class="colhead" x="256" y="128" text-anchor="middle">DRIVERS</text>
+        <text class="colhead" x="560" y="16" text-anchor="middle">ESTIMATORS</text>
+        <text class="colhead" x="864" y="96" text-anchor="middle">DECISIONS &amp; OUTPUTS</text>
+        <text class="colhead" x="1049" y="96" text-anchor="middle">HARDWARE</text>
+
+        <!-- edges (drawn first so boxes sit on top) -->
+        <g class="edge" data-a="chipImu" data-b="imu" data-real="1"><path d="M126,173 H174" marker-end="url(#ah)"/><text x="150" y="166" text-anchor="middle">I²C</text></g>
+        <g class="edge" data-a="chipBaro" data-b="baro" data-real="1"><path d="M126,273 H174" marker-end="url(#ah)"/><text x="150" y="266" text-anchor="middle">I²C</text></g>
+        <g class="edge" data-a="imu" data-b="ino" data-real="1"><path d="M336,173 H428" marker-end="url(#ah)"/><text x="382" y="160" text-anchor="middle">accel, gyro</text><text x="382" y="190" text-anchor="middle">readImu()</text></g>
+        <g class="edge" data-a="baro" data-b="ino" data-real="1"><path d="M336,273 H428" marker-end="url(#ah)"/><text x="382" y="260" text-anchor="middle">pressure Pa</text><text x="382" y="290" text-anchor="middle">pollBaro()</text></g>
+        <g class="edge" data-a="sim" data-b="ino" data-sim="1"><path d="M336,366 H428" marker-end="url(#ah)"/><text x="382" y="358" text-anchor="middle">fake sensors</text></g>
+        <g class="edge" data-a="ino" data-b="sim" data-sim="1"><path d="M428,390 H338" marker-end="url(#ah)"/><text x="382" y="408" text-anchor="middle">gimbal, pyro</text></g>
+
+        <g class="edge" data-a="ino" data-b="att"><path d="M470,150 V88" marker-end="url(#ah)"/><text x="462" y="114" text-anchor="end">gyro, accel</text><text x="462" y="128" text-anchor="end">att.update()</text></g>
+        <g class="edge" data-a="att" data-b="ino"><path d="M500,88 V148" marker-end="url(#ah)"/><text x="508" y="114">tilt X/Y</text><text x="508" y="128">accel up</text></g>
+        <g class="edge" data-a="ino" data-b="nav"><path d="M622,150 V88" marker-end="url(#ah)"/><text x="614" y="114" text-anchor="end">accel up,</text><text x="614" y="128" text-anchor="end">baro alt</text></g>
+        <g class="edge" data-a="nav" data-b="ino"><path d="M652,88 V148" marker-end="url(#ah)"/><text x="660" y="114">altitude,</text><text x="660" y="128">velocity</text></g>
+
+        <g class="edge" data-a="ino" data-b="tvc"><path d="M690,158 H790" marker-end="url(#ah)"/><text x="740" y="150" text-anchor="middle">tilt, rate</text></g>
+        <g class="edge" data-a="ino" data-b="landing"><path d="M690,210 H790" marker-end="url(#ah)"/><text x="740" y="202" text-anchor="middle">alt, vel</text></g>
+        <g class="edge" data-a="landing" data-b="ino"><path d="M790,226 H692" marker-end="url(#ah)"/><text x="740" y="242" text-anchor="middle">fire now? y/n</text></g>
+        <g class="edge" data-a="ino" data-b="pyro"><path d="M690,298 H790" marker-end="url(#ah)"/><text x="740" y="290" text-anchor="middle">fire()</text></g>
+        <g class="edge" data-a="ino" data-b="log"><path d="M690,378 H790" marker-end="url(#ah)"/><text x="740" y="370" text-anchor="middle">add() 100 Hz</text></g>
+
+        <g class="edge" data-a="tvc" data-b="servos"><path d="M940,138 H996" marker-end="url(#ah)"/><text x="968" y="130" text-anchor="middle">PWM</text></g>
+        <g class="edge" data-a="pyro" data-b="igniters" id="e-pyro-ign"><path d="M940,298 H996" marker-end="url(#ah)"/><text x="968" y="290" text-anchor="middle" id="pyro-edge-lbl">gate</text></g>
+        <g class="edge" data-a="log" data-b="sd"><path d="M940,378 H996" marker-end="url(#ah)"/><text x="968" y="370" text-anchor="middle">after</text></g>
+
+        <g class="edge" data-a="ino" data-b="usb"><path d="M470,412 V468" marker-end="url(#ah)"/><text x="462" y="444" text-anchor="end">messages</text></g>
+        <g class="edge" data-a="usb" data-b="ino"><path d="M500,468 V414" marker-end="url(#ah)"/><text x="508" y="444">commands</text></g>
+        <g class="edge" data-a="ino" data-b="esp"><path d="M650,412 V468" marker-end="url(#ah)"/><text x="642" y="444" text-anchor="end">T, M lines</text></g>
+        <g class="edge" data-a="esp" data-b="ino"><path d="M680,468 V414" marker-end="url(#ah)"/><text x="688" y="444">commands, HB</text></g>
+        <g class="edge" data-a="esp" data-b="phone"><path d="M760,496 H838" marker-start="url(#ah)" marker-end="url(#ah)"/><text x="799" y="488" text-anchor="middle">Wi-Fi</text></g>
+
+        <!-- nodes -->
+        <g class="node hw" data-id="chipImu" data-real="1"><rect class="box" x="16" y="145" width="110" height="56" rx="3"/><text class="nm" x="71" y="169" text-anchor="middle">MPU6050</text><text class="sb" x="71" y="186" text-anchor="middle">gyro + accel</text></g>
+        <g class="node hw" data-id="chipBaro" data-real="1"><rect class="box" x="16" y="245" width="110" height="56" rx="3"/><text class="nm" x="71" y="269" text-anchor="middle">BMP388</text><text class="sb" x="71" y="286" text-anchor="middle">air pressure</text></g>
+
+        <g class="node click" data-id="imu" data-real="1" tabindex="0" role="button" aria-label="imu_mpu6050.h"><rect class="box" x="176" y="145" width="160" height="56" rx="4"/><text class="nm" x="256" y="169" text-anchor="middle">imu_mpu6050.h</text><text class="sb" x="256" y="186" text-anchor="middle">gyro/accel driver</text></g>
+        <g class="node click" data-id="baro" data-real="1" tabindex="0" role="button" aria-label="baro_bmp3xx.h"><rect class="box" x="176" y="245" width="160" height="56" rx="4"/><text class="nm" x="256" y="269" text-anchor="middle">baro_bmp3xx.h</text><text class="sb" x="256" y="286" text-anchor="middle">barometer driver</text></g>
+        <g class="node click" data-id="sim" data-sim="1" tabindex="0" role="button" aria-label="sim.h"><rect class="box" x="176" y="345" width="160" height="56" rx="4"/><text class="nm" x="256" y="369" text-anchor="middle">sim.h</text><text class="sb" x="256" y="386" text-anchor="middle">virtual rocket</text></g>
+
+        <g class="node click" data-id="att" tabindex="0" role="button" aria-label="attitude.h"><rect class="box" x="398" y="30" width="150" height="56" rx="4"/><text class="nm" x="473" y="54" text-anchor="middle">attitude.h</text><text class="sb" x="473" y="71" text-anchor="middle">which way is up</text></g>
+        <g class="node click" data-id="nav" tabindex="0" role="button" aria-label="nav_filter.h"><rect class="box" x="572" y="30" width="150" height="56" rx="4"/><text class="nm" x="647" y="54" text-anchor="middle">nav_filter.h</text><text class="sb" x="647" y="71" text-anchor="middle">altitude + speed</text></g>
+
+        <g class="node click" data-id="ino" tabindex="0" role="button" aria-label="TVC_Flight_Computer.ino"><rect class="box" x="430" y="150" width="260" height="262" rx="5"/>
+          <text class="nm" x="560" y="176" text-anchor="middle" style="font-size:13.5px">TVC_Flight_Computer.ino</text>
+          <text class="sb" x="560" y="194" text-anchor="middle">the brain · the only file that decides</text>
+          <line x1="446" y1="206" x2="674" y2="206" style="stroke:var(--rule)"/>
+          <text class="sb" x="450" y="228" style="fill:var(--ink-2)"><tspan class="mono-t">setup()</tspan>  once at power-on</text>
+          <text class="sb" x="450" y="250" style="fill:var(--ink-2)"><tspan class="mono-t">loop()</tspan>  every 2 ms</text>
+          <text class="sb" x="450" y="272" style="fill:var(--ink-2)"><tspan class="mono-t">runStateMachine()</tspan>  14 states</text>
+          <text class="sb" x="450" y="294" style="fill:var(--ink-2)"><tspan class="mono-t">handleCommand()</tspan>  ARM, LAUNCH…</text>
+          <text class="sb" x="450" y="316" style="fill:var(--ink-2)"><tspan class="mono-t">sendTelemetry()</tspan>  10 Hz</text>
+          <text class="sb" x="450" y="338" style="fill:var(--ink-2)"><tspan class="mono-t">logRecord()</tspan>  100 Hz</text>
+          <text class="sb" x="450" y="360" style="fill:var(--ink-2)"><tspan class="mono-t">disarm(), abortFlight()</tspan></text>
+          <text class="sb" x="450" y="382" style="fill:var(--ink-2)"><tspan class="mono-t">event()</tspan>  messages + event log</text>
+        </g>
+
+        <g class="node click" data-id="tvc" tabindex="0" role="button" aria-label="tvc.h"><rect class="box" x="790" y="112" width="150" height="54" rx="4"/><text class="nm" x="865" y="135" text-anchor="middle">tvc.h</text><text class="sb" x="865" y="152" text-anchor="middle">PID → servo pulses</text></g>
+        <g class="node click" data-id="landing" tabindex="0" role="button" aria-label="landing.h"><rect class="box" x="790" y="192" width="150" height="54" rx="4"/><text class="nm" x="865" y="215" text-anchor="middle">landing.h</text><text class="sb" x="865" y="232" text-anchor="middle">when to light motor 2</text></g>
+        <g class="node click" data-id="pyro" tabindex="0" role="button" aria-label="pyro.h"><rect class="box" x="790" y="272" width="150" height="54" rx="4"/><text class="nm" x="865" y="295" text-anchor="middle">pyro.h</text><text class="sb" x="865" y="312" text-anchor="middle">igniter channels</text></g>
+        <g class="node click" data-id="log" tabindex="0" role="button" aria-label="flight_log.h"><rect class="box" x="790" y="352" width="150" height="54" rx="4"/><text class="nm" x="865" y="375" text-anchor="middle">flight_log.h</text><text class="sb" x="865" y="392" text-anchor="middle">RAM log → SD card</text></g>
+
+        <g class="node hw" data-id="servos"><rect class="box" x="998" y="112" width="106" height="54" rx="3"/><text class="nm" x="1051" y="135" text-anchor="middle">2 servos</text><text class="sb" x="1051" y="152" text-anchor="middle">pins 2, 3</text></g>
+        <g class="node hw" data-id="igniters"><rect class="box" x="998" y="272" width="106" height="54" rx="3"/><text class="nm" x="1051" y="295" text-anchor="middle">igniters</text><text class="sb" x="1051" y="312" text-anchor="middle">MOSFETs 5, 6</text></g>
+        <g class="node hw" data-id="sd"><rect class="box" x="998" y="352" width="106" height="54" rx="3"/><text class="nm" x="1051" y="375" text-anchor="middle">SD card</text><text class="sb" x="1051" y="392" text-anchor="middle">built-in slot</text></g>
+
+        <g class="node hw" data-id="usb"><rect class="box" x="430" y="470" width="150" height="54" rx="3"/><text class="nm" x="505" y="493" text-anchor="middle">USB</text><text class="sb" x="505" y="510" text-anchor="middle">Serial Monitor, 115200</text></g>
+        <g class="node click" data-id="esp" tabindex="0" role="button" aria-label="ESP32_Ground_Link.ino"><rect class="box" x="600" y="470" width="160" height="54" rx="4"/><text class="nm" x="680" y="493" text-anchor="middle">ESP32_Ground_Link</text><text class="sb" x="680" y="510" text-anchor="middle">Wi-Fi bridge, own board</text></g>
+        <g class="node hw" data-id="phone"><rect class="box" x="840" y="470" width="150" height="54" rx="3"/><text class="nm" x="915" y="493" text-anchor="middle">phone browser</text><text class="sb" x="915" y="510" text-anchor="middle">192.168.4.1</text></g>
+
+        <!-- foundations -->
+        <g class="node click found" data-id="config" tabindex="0" role="button" aria-label="config.h"><rect class="box" x="16" y="552" width="1088" height="34" rx="3"/><text class="nm" x="32" y="574">config.h</text><text class="sb" x="110" y="574">every setting you edit: pins, mass, gains, timings, landing, simulator. #included by every file.</text></g>
+        <g class="node click found" data-id="types" tabindex="0" role="button" aria-label="flight_types.h"><rect class="box" x="16" y="594" width="536" height="34" rx="3"/><text class="nm" x="32" y="616">flight_types.h</text><text class="sb" x="150" y="616">state names, Vec3 + quaternion math, G0</text></g>
+        <g class="node click found" data-id="curves" tabindex="0" role="button" aria-label="motor_curves.h"><rect class="box" x="568" y="594" width="536" height="34" rx="3"/><text class="nm" x="584" y="616">motor_curves.h</text><text class="sb" x="702" y="616">E16 thrust curve, used by landing.h and sim.h</text></g>
+      </svg>
+    </div>
+    <figcaption>Arrows show what data moves and which function moves it. Grey boxes are physical hardware. Switch between the two build modes above: in <code>SIM_MODE 1</code> the sensor chips and their drivers drop out, <code>sim.h</code> feeds the brain fake sensor readings, and the igniter pins are never switched on.</figcaption>
+  </figure>
+
+  <div class="panel" id="filepanel" aria-live="polite"></div>
+</section>
+
+<!-- ================= LOOP ================= -->
+<section id="loop">
+  <div class="sec-head">
+    <div class="tag">Timing</div>
+    <h2>One trip around the loop, every 2 ms</h2>
+  </div>
+  <div class="prose">
+    <p>Arduino calls <code>loop()</code> as fast as it can. The first thing it does is check for typed commands, then it waits until 2 ms have passed since the last pass (<code>LOOP_HZ 500</code>). Then it runs these steps in this exact order, 500 times a second. Slower jobs ride along by counting passes: the barometer gives a new reading every 10th pass, the log saves every 5th, telemetry goes out every 50th.</p>
+  </div>
+  <ol class="pipe">
+    <li><div class="what"><b>pollStream(Serial) · pollStream(GROUND_SERIAL)</b><span>Collects typed characters from USB and the ESP32. A full line (ending in Enter) goes to <code>handleCommand()</code>.</span></div><div class="meta"><span class="chip rate">every pass</span><span class="chip">.ino</span></div></li>
+    <li><div class="what"><b>wait for the 2 ms tick, measure dt</b><span><code>dt</code> is the real time since the last tick (about 0.002 s). Every integration below uses it.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">.ino</span></div></li>
+    <li><div class="what"><b>sim.step(dt, gimbal, pyro flags)</b><span>Only in <code>SIM_MODE 1</code>: moves the virtual rocket forward 2 ms using the gimbal angles the code commanded last pass.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">sim.h</span></div></li>
+    <li><div class="what"><b>readImu()</b><span>Reads 14 bytes from the MPU6050 (or the sim), converts to g and °/s, and remaps the chip's axes to rocket axes with <code>IMU_AXIS_FOR_BODY_*</code>.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">imu_mpu6050.h</span></div></li>
+    <li><div class="what"><b>att.update(gyro, accel, dt)</b><span>Turns the attitude estimate by the measured rotation. On the ground it also nudges the estimate toward gravity so it can't drift.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">attitude.h</span></div></li>
+    <li><div class="what"><b>accUp = att.verticalAccel(accel)</b><span>Acceleration straight up, with gravity removed. During coast and descent anything over 1 g is a shock (the E16-4 ejection charge) and is replaced with plain free fall.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">attitude.h</span><span class="chip">.ino</span></div></li>
+    <li><div class="what"><b>nav.predict(accUp, dt)</b><span>The altitude filter's fast step: velocity += accel × dt, altitude += velocity × dt.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">nav_filter.h</span></div></li>
+    <li><div class="what"><b>pollBaro() → nav.updateBaro(baroAlt)</b><span>If the BMP388 has a new sample, convert pressure to altitude and use it to correct the filter's drift.</span></div><div class="meta"><span class="chip rate">50 Hz</span><span class="chip">baro_bmp3xx.h</span><span class="chip">nav_filter.h</span></div></li>
+    <li><div class="what"><b>nav.reset(0) while sitting on the pad</b><span>On the ground the rocket is at 0 m and 0 m/s by definition, so the filter is pinned there until thrust shows up.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">nav_filter.h</span></div></li>
+    <li><div class="what"><b>readVoltages()</b><span>Pyro-rail voltage (is the ARM switch on?) and igniter continuity through the resistor dividers.</span></div><div class="meta"><span class="chip rate">10 Hz</span><span class="chip">pyro.h</span></div></li>
+    <li><div class="what"><b>runStateMachine(dt, now)</b><span>The decisions. Depending on the state it steers the gimbal, checks for lift-off, burnout or apogee, asks <code>landing.h</code> whether to fire, or fires a pyro channel.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">.ino</span><span class="chip">tvc.h</span><span class="chip">landing.h</span><span class="chip">pyro.h</span></div></li>
+    <li><div class="what"><b>pyroAscent.update() · pyroLanding.update() …</b><span>Turns each igniter off once it has been on for <code>PYRO_FIRE_MS</code> (1 s).</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">pyro.h</span></div></li>
+    <li><div class="what"><b>logRecord(now)</b><span>Copies 18 numbers into the RAM flight log (64 bytes per record, 40 seconds kept).</span></div><div class="meta"><span class="chip rate">100 Hz</span><span class="chip">flight_log.h</span></div></li>
+    <li><div class="what"><b>sendTelemetry(now)</b><span>Sends one <code>T,…</code> line to the ESP32 (and to USB when not idle).</span></div><div class="meta"><span class="chip rate">10 Hz</span><span class="chip">.ino</span></div></li>
+    <li><div class="what"><b>updateIndicators(now)</b><span>LED and buzzer patterns for the current state: armed chirps, countdown beeps, locator beeps after landing.</span></div><div class="meta"><span class="chip rate">500 Hz</span><span class="chip">.ino</span></div></li>
+  </ol>
+</section>
+
+<!-- ================= STATES ================= -->
+<section id="states">
+  <div class="sec-head">
+    <div class="tag">Behaviour</div>
+    <h2>The flight, state by state</h2>
+  </div>
+  <div class="prose">
+    <p>At any moment the computer is in exactly one state, stored in the variable <code>state</code>. <code>runStateMachine()</code> is one big <code>switch (state)</code>: each case says what to do every 2 ms in that state and what moves it to the next one. The top row happens on the ground, the bottom row in the air. Click a state for the details.</p>
+  </div>
+  <figure>
+    <div class="figbox scroll">
+      <svg class="diagram" id="statemap" viewBox="0 0 1120 470" role="img" aria-label="State machine. Ground row: IDLE, CALIBRATING, ARMED, COUNTDOWN, IGNITION_WAIT. Flight row: ASCENT, COAST, DESCENT, LANDING_IGNITION, LANDING_BURN, LANDED. Problems on the ground return to IDLE; problems in flight go to ABORT.">
+        <defs>
+          <marker id="sah" class="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+          <marker id="sahon" class="ah-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker>
+        </defs>
+        <text class="colhead" x="1100" y="140" text-anchor="end">ON THE GROUND</text>
+        <text class="colhead" x="1100" y="272" text-anchor="end">IN THE AIR</text>
+
+        <!-- boot -->
+        <circle cx="60" cy="55" r="6" style="fill:var(--ink)"/>
+        <text class="el" x="60" y="40" text-anchor="middle">power on</text>
+        <g class="edge" data-from="boot" data-to="ERROR"><path d="M66,55 H198" marker-end="url(#sah)"/><text x="132" y="48" text-anchor="middle">sensor fault</text></g>
+        <g class="edge" data-from="boot" data-to="IDLE"><path d="M60,61 V100 H215 V148" marker-end="url(#sah)"/><text x="138" y="94" text-anchor="middle">sensors OK</text></g>
+
+        <!-- ground row edges -->
+        <g class="edge" data-from="TVC_TEST" data-to="IDLE"><path d="M150,184 H198" marker-end="url(#sah)"/><text x="175" y="199" text-anchor="middle">STOP</text></g>
+        <g class="edge" data-from="IDLE" data-to="TVC_TEST"><path d="M200,164 H152" marker-end="url(#sah)"/><text x="175" y="158" text-anchor="middle">TVCTEST</text></g>
+        <g class="edge" data-from="IDLE" data-to="CALIBRATING"><path d="M330,175 H378" marker-end="url(#sah)"/><text x="355" y="168" text-anchor="middle">ARM</text></g>
+        <g class="edge" data-from="CALIBRATING" data-to="ARMED"><path d="M510,175 H558" marker-end="url(#sah)"/><text x="535" y="168" text-anchor="middle">2 s still</text></g>
+        <g class="edge" data-from="ARMED" data-to="COUNTDOWN"><path d="M690,175 H738" marker-end="url(#sah)"/><text x="714" y="168" text-anchor="middle">LAUNCH</text></g>
+        <g class="edge" data-from="COUNTDOWN" data-to="IGNITION_WAIT"><path d="M870,175 H918" marker-end="url(#sah)"/><text x="894" y="168" text-anchor="middle">T-0</text></g>
+        <!-- return to IDLE bus -->
+        <g class="edge" data-from="CALIBRATING ARMED COUNTDOWN IGNITION_WAIT" data-to="IDLE"><path d="M445,150 V118 M625,150 V118 M805,150 V118 M985,150 V118 H320 V148" marker-end="url(#sah)"/><text x="652" y="111" text-anchor="middle">cal failed · DISARM · tipped · ARM switch off · link lost · misfire</text></g>
+
+        <!-- carriage return to flight row -->
+        <g class="edge" data-from="IGNITION_WAIT" data-to="ASCENT"><path d="M985,200 V238 H85 V278" marker-end="url(#sah)"/><text x="535" y="232" text-anchor="middle">lift-off: over 1.5 g for 50 ms</text></g>
+
+        <!-- flight row edges -->
+        <g class="edge" data-from="ASCENT" data-to="COAST"><path d="M150,305 H198" marker-end="url(#sah)"/><text x="175" y="298" text-anchor="middle">burnout</text></g>
+        <g class="edge" data-from="COAST" data-to="DESCENT"><path d="M330,305 H378" marker-end="url(#sah)"/><text x="355" y="298" text-anchor="middle">apogee</text></g>
+        <g class="edge" data-from="DESCENT" data-to="LANDING_IGNITION"><path d="M510,305 H558" marker-end="url(#sah)"/><text x="535" y="298" text-anchor="middle">fire</text></g>
+        <g class="edge" data-from="LANDING_IGNITION" data-to="LANDING_BURN"><path d="M690,305 H738" marker-end="url(#sah)"/><text x="714" y="298" text-anchor="middle">lit</text></g>
+        <g class="edge" data-from="LANDING_BURN" data-to="LANDED"><path d="M870,305 H918" marker-end="url(#sah)"/><text x="894" y="298" text-anchor="middle">still</text></g>
+        <!-- abort bus -->
+        <g class="edge" data-from="ASCENT COAST DESCENT LANDING_IGNITION" data-to="ABORT"><path d="M85,330 V372 H625 M265,330 V372 M625,330 V372 M445,330 V398" marker-end="url(#sah)"/><text x="640" y="388">tilt over 30° · IMU lost · motor didn't light · ABORT command</text></g>
+
+        <!-- state nodes -->
+        <g class="node click" data-id="ERROR" tabindex="0" role="button"><rect class="box" x="200" y="30" width="130" height="50" rx="4"/><text class="nm" x="265" y="51" text-anchor="middle">ERROR</text><text class="sb" x="265" y="68" text-anchor="middle">fix wiring, reboot</text></g>
+        <g class="node click" data-id="TVC_TEST" tabindex="0" role="button"><rect class="box" x="20" y="150" width="130" height="50" rx="4"/><text class="nm" x="85" y="171" text-anchor="middle">TVC_TEST</text><text class="sb" x="85" y="188" text-anchor="middle">hand-tilt check</text></g>
+        <g class="node click" data-id="IDLE" tabindex="0" role="button"><rect class="box" x="200" y="150" width="130" height="50" rx="4"/><text class="nm" x="265" y="171" text-anchor="middle">IDLE</text><text class="sb" x="265" y="188" text-anchor="middle">safe</text></g>
+        <g class="node click" data-id="CALIBRATING" tabindex="0" role="button"><rect class="box" x="380" y="150" width="130" height="50" rx="4"/><text class="nm" x="445" y="171" text-anchor="middle">CALIBRATING</text><text class="sb" x="445" y="188" text-anchor="middle">keep still 2 s</text></g>
+        <g class="node click" data-id="ARMED" tabindex="0" role="button"><rect class="box" x="560" y="150" width="130" height="50" rx="4"/><text class="nm" x="625" y="171" text-anchor="middle">ARMED</text><text class="sb" x="625" y="188" text-anchor="middle">pyros live</text></g>
+        <g class="node click" data-id="COUNTDOWN" tabindex="0" role="button"><rect class="box" x="740" y="150" width="130" height="50" rx="4"/><text class="nm" x="805" y="171" text-anchor="middle">COUNTDOWN</text><text class="sb" x="805" y="188" text-anchor="middle">10 s, beeping</text></g>
+        <g class="node click" data-id="IGNITION_WAIT" tabindex="0" role="button"><rect class="box" x="920" y="150" width="130" height="50" rx="4"/><text class="nm" x="985" y="171" text-anchor="middle">IGNITION_WAIT</text><text class="sb" x="985" y="188" text-anchor="middle">igniter 1 on</text></g>
+
+        <g class="node click" data-id="ASCENT" tabindex="0" role="button"><rect class="box" x="20" y="280" width="130" height="50" rx="4"/><text class="nm" x="85" y="301" text-anchor="middle">ASCENT</text><text class="sb" x="85" y="318" text-anchor="middle">TVC steering</text></g>
+        <g class="node click" data-id="COAST" tabindex="0" role="button"><rect class="box" x="200" y="280" width="130" height="50" rx="4"/><text class="nm" x="265" y="301" text-anchor="middle">COAST</text><text class="sb" x="265" y="318" text-anchor="middle">gimbal centred</text></g>
+        <g class="node click" data-id="DESCENT" tabindex="0" role="button"><rect class="box" x="380" y="280" width="130" height="50" rx="4"/><text class="nm" x="445" y="301" text-anchor="middle">DESCENT</text><text class="sb" x="445" y="318" text-anchor="middle">predicting</text></g>
+        <g class="node click" data-id="LANDING_IGNITION" tabindex="0" role="button"><rect class="box" x="560" y="280" width="130" height="50" rx="4"/><text class="nm" x="625" y="301" text-anchor="middle" style="font-size:11.5px">LANDING_IGNITION</text><text class="sb" x="625" y="318" text-anchor="middle">igniter 2 on</text></g>
+        <g class="node click" data-id="LANDING_BURN" tabindex="0" role="button"><rect class="box" x="740" y="280" width="130" height="50" rx="4"/><text class="nm" x="805" y="301" text-anchor="middle">LANDING_BURN</text><text class="sb" x="805" y="318" text-anchor="middle">TVC steering</text></g>
+        <g class="node click" data-id="LANDED" tabindex="0" role="button"><rect class="box" x="920" y="280" width="130" height="50" rx="4"/><text class="nm" x="985" y="301" text-anchor="middle">LANDED</text><text class="sb" x="985" y="318" text-anchor="middle">save log, beep</text></g>
+        <g class="node click" data-id="ABORT" tabindex="0" role="button"><rect class="box" x="380" y="400" width="130" height="50" rx="4"/><text class="nm" x="445" y="421" text-anchor="middle">ABORT</text><text class="sb" x="445" y="438" text-anchor="middle">no landing burn</text></g>
+      </svg>
+    </div>
+    <figcaption>Each arrow is labelled with what triggers it. Problems on the ground always lead back to IDLE with the pyros disarmed. Problems in the air lead to ABORT, which never lights the landing motor and fires the backup parachute if you fitted one.</figcaption>
+  </figure>
+  <div class="panel" id="statepanel" aria-live="polite"></div>
+</section>
+
+<!-- ================= FLIGHT ================= -->
+<section id="flight">
+  <div class="sec-head">
+    <div class="tag">Evidence</div>
+    <h2>A real flight, from the simulator</h2>
+  </div>
+  <div class="prose">
+    <p>This is the flight log the code wrote to <code>FLT000.CSV</code> during a simulated flight with the default settings (1.10 kg rocket, E16 up, E16 down, 0.35 s igniter delay). Time zero is the moment the code detected lift-off. Shaded bands are the two burns, when the gimbal is steering. Move across a chart to read every value at that instant.</p>
+  </div>
+  <figure>
+    <div class="figbox">
+      <div class="legend" aria-hidden="true"><span><i class="kb"></i>gimbal steering (ASCENT, LANDING_BURN)</span></div>
+      <div class="ctitle"><b>Altitude</b><span>metres, from the altitude filter (<code>nav.h</code>)</span></div>
+      <div class="chart" id="c-alt" tabindex="0" aria-label="Altitude chart: climbs to 19.3 metres at 3.1 seconds, landing motor fired at 15.2 metres on the way down, touchdown at 6.5 seconds."></div>
+      <div class="ctitle"><b>Vertical speed</b><span>m/s, positive is up (<code>nav.v</code>)</span></div>
+      <div class="chart" id="c-vel" tabindex="0" aria-label="Vertical speed chart: peaks near 11 metres per second at burnout, falls to minus 9 metres per second when the landing motor is fired, then is braked to about zero."></div>
+      <div class="ctitle"><b>Tilt and gimbal, X axis</b><span>degrees</span></div>
+      <div class="legend"><span><i class="k1"></i>tilt X (<code>att.tiltXDeg()</code>)</span><span><i class="k2"></i>gimbal X command (<code>tvc.gimbalX</code>)</span></div>
+      <div class="chart" id="c-tilt" tabindex="0" aria-label="Tilt and gimbal chart: tilt stays within 2 degrees; the gimbal moves only during the two burns and is centred during coast and descent."></div>
+      <div class="tip" id="flight-tip" hidden></div>
+    </div>
+    <figcaption>The simulated rocket touched down at 1.7 m/s, 0.3° from vertical. Three things to notice. Between "fire motor 2" and "lit" the rocket keeps falling for half a second and speeds up from 9 to 12 m/s: that is the igniter delay the landing predictor has to plan for. The gimbal sits at exactly zero between the burns, because with no thrust there is nothing to steer with. During the climb the rocket holds about 1° of lean while the gimbal holds about −0.5°: the simulator builds in a crooked motor mount, and the controller is cancelling it.</figcaption>
+  </figure>
+
+  <div class="tablebox">
+    <table>
+      <thead><tr><th class="num">t (s)</th><th>Event (from <code>FLT000.TXT</code>)</th><th>What the code did</th></tr></thead>
+      <tbody>
+        <tr><td class="num">−0.49</td><td><code>IGNITION</code></td><td>Countdown hit zero, <code>pyroAscent.fire()</code> powered igniter 1.</td></tr>
+        <tr><td class="num">0.00</td><td><code>LIFTOFF</code></td><td>Over 1.5 g for 50 ms. State ASCENT, gimbal control on.</td></tr>
+        <tr><td class="num">1.92</td><td><code>BURNOUT at 1.97 s, alt 13.5 m, vel 10.6 m/s</code></td><td>Under 0.4 g for 60 ms. Gimbal centred, state COAST.</td></tr>
+        <tr><td class="num">3.10</td><td><code>APOGEE 19.30 m</code></td><td>Velocity below zero for 100 ms. State DESCENT, landing predictor starts.</td></tr>
+        <tr><td class="num">3.92</td><td><code>LANDING IGNITION alt 15.24 m vel −8.97 m/s</code></td><td><code>landingFireDecision()</code> said waiting longer would be worse. Igniter 2 on, legs released.</td></tr>
+        <tr><td class="num">4.43</td><td><code>LANDING MOTOR LIT 0.450 s after fire</code></td><td>Over 1.3 g for 60 ms. Gimbal control back on.</td></tr>
+        <tr><td class="num">5.95</td><td>(no message)</td><td>The E16-4 ejection charge kicked the sensors. The altitude filter rejected the barometer spike.</td></tr>
+        <tr><td class="num">6.49</td><td><code>SIM: TOUCHDOWN −1.72 m/s</code></td><td>The simulator's own report of the real touchdown.</td></tr>
+        <tr><td class="num">6.99</td><td><code>TOUCHDOWN detected</code></td><td>About 1 g and barely rotating for 0.5 s. State LANDED, then log saved.</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <details>
+    <summary>Show the chart data as a table (every 0.25 s)</summary>
+    <div class="tablebox"><table id="flight-table"><thead><tr><th class="num">t (s)</th><th>state</th><th class="num">alt (m)</th><th class="num">baro (m)</th><th class="num">vel (m/s)</th><th class="num">tilt X (°)</th><th class="num">gimbal X (°)</th></tr></thead><tbody></tbody></table></div>
+  </details>
+</section>
+
+<!-- ================= ATTITUDE ================= -->
+<section id="attitude">
+  <div class="sec-head">
+    <div class="tag">attitude.h · flight_types.h</div>
+    <h2>Tilt: knowing which way is up</h2>
+  </div>
+  <div class="two">
+    <div class="prose">
+      <p>The MPU6050 gyro measures how fast the rocket is rotating, in °/s, about its own three axes. <code>AttitudeEstimator</code> adds those small rotations up 500 times a second into a <em>quaternion</em> <code>q</code>: four numbers that describe which way the rocket is pointing without the gimbal-lock problems of plain angles. <code>qintegrate()</code> in <code>flight_types.h</code> does the adding.</p>
+      <p>From <code>q</code> the code asks one question: where is "world up" as seen from the rocket? That vector is <code>upInBody()</code>. Its sideways parts become <code>tiltXDeg()</code> and <code>tiltYDeg()</code>, the tilt about each gimbal axis. Because the tilt is measured in the rocket's own axes, it stays correct when the rocket rolls.</p>
+      <p><b>Why calibration matters.</b> On the ground the accelerometer feels gravity, so the code uses it to keep the estimate honest. In flight it feels thrust and drag instead, so the code switches it off and trusts the gyro alone. Any gyro error then piles up: a 0.5 °/s bias becomes a 5° tilt error after 10 s. That is why ARM makes you keep the rocket still for 2 s while it measures the bias.</p>
+    </div>
+    <pre><code>// attitude.h, update(): every 2 ms
+Vec3 w = (gyroDps - gyroBiasDps) * DEG2RAD;
+if (useAccel) {               // ground only
+  Vec3 err = cross(normalized(accelG), upInBody());
+  w = w + err * 2.0f;         // nudge toward gravity
+}
+q = qintegrate(q, w, dt);
+
+// tilt about each gimbal axis
+float tiltXDeg() { Vec3 u = upInBody();
+                   return atan2f(u.y, u.z) * RAD2DEG; }
+float tiltYDeg() { Vec3 u = upInBody();
+                   return atan2f(-u.x, u.z) * RAD2DEG; }</code></pre>
+  </div>
+</section>
+
+<!-- ================= ALTITUDE ================= -->
+<section id="altitude">
+  <div class="sec-head">
+    <div class="tag">nav_filter.h · baro_bmp3xx.h</div>
+    <h2>Altitude: predict fast, correct slowly</h2>
+  </div>
+  <div class="prose">
+    <p>Two sensors know something about height, and each is bad in its own way. The accelerometer is smooth and instant but drifts, because adding up acceleration twice turns tiny errors into big ones. The BMP388 barometer never drifts but is noisy and only updates 50 times a second.</p>
+    <p><code>AltitudeFilter</code> is a Kalman filter that combines them. Every 2 ms <code>predict()</code> moves altitude and velocity forward using the accelerometer. Every 20 ms <code>updateBaro()</code> compares the prediction with the barometer and pulls it part of the way back. How far it pulls depends on how much the filter currently trusts each source. It also tracks the accelerometer's bias as a third number. A barometer reading more than 4 m away from the prediction is treated as a glitch and ignored (<code>gateM</code>).</p>
+  </div>
+  <figure>
+    <div class="figbox">
+      <div class="ctitle"><b>Barometer vs filter, descent and landing</b><span>metres, 3.0 to 6.6 s after lift-off</span></div>
+      <div class="legend"><span><i class="k1"></i>filter estimate (<code>nav.h</code>)</span><span><i class="k2"></i>raw barometer (<code>baroAlt</code>)</span></div>
+      <div class="chart" id="c-kal" tabindex="0" aria-label="Barometer versus filter: the raw barometer is noisy by about half a metre and dips to minus 5.8 metres at 5.95 seconds from the ejection charge; the filter line stays smooth and ignores the dip."></div>
+      <div class="tip" id="kal-tip" hidden></div>
+    </div>
+    <figcaption>The orange line wobbles by a few tenths of a metre; the blue estimate is smooth. At 5.95 s the ejection charge's pressure pulse made the barometer read −5.8 m. The filter rejected it because it was more than 4 m from the prediction.</figcaption>
+  </figure>
+</section>
+
+<!-- ================= TVC ================= -->
+<section id="tvc">
+  <div class="sec-head">
+    <div class="tag">tvc.h</div>
+    <h2>Gimbal control: push the tail back under the nose</h2>
+  </div>
+  <div class="two">
+    <figure style="margin-top:18px">
+      <div class="figbox">
+        <svg class="diagram" viewBox="0 0 420 370" role="img" aria-label="The nose leans right. The controller swings the nozzle to the left, so the thrust line points up and to the right and pushes the tail to the right, which straightens the rocket.">
+          <defs>
+            <marker id="tah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--series-2)"/></marker>
+            <marker id="tah2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z" style="fill:var(--ink-2)"/></marker>
+          </defs>
+          <line x1="180" y1="20" x2="180" y2="340" stroke-width="1" style="stroke:var(--rule)"/>
+          <text class="el" x="186" y="352">vertical</text>
+          <g transform="rotate(14 180 190)">
+            <path d="M166,70 L180,30 L194,70 Z" stroke="currentColor" stroke-width="1.5" style="fill:var(--sheet)"/>
+            <rect x="166" y="70" width="28" height="180" stroke="currentColor" stroke-width="1.5" style="fill:var(--sheet)"/>
+            <circle cx="180" cy="190" r="4" fill="currentColor"/>
+            <text class="el" x="200" y="194">CG</text>
+            <circle cx="180" cy="250" r="3" style="fill:var(--ink-2)"/>
+            <g transform="rotate(10 180 250)">
+              <rect x="171" y="250" width="18" height="44" stroke="currentColor" stroke-width="1.5" style="fill:var(--code-bg)"/>
+              <path d="M173,294 L169,306 L191,306 L187,294 Z" stroke="currentColor" stroke-width="1.2" style="fill:var(--code-bg)"/>
+              <line x1="180" y1="352" x2="180" y2="314" stroke-width="3" marker-end="url(#tah)" style="stroke:var(--series-2)"/>
+            </g>
+          </g>
+          <path d="M248,86 A120,120 0 0 0 196,58" fill="none" stroke-width="1.4" marker-end="url(#tah2)" style="stroke:var(--ink-2)"/>
+          <text class="ann" x="252" y="86">rocket rotates back</text>
+          <text class="ann" x="226" y="128">nose leans right</text>
+          <text class="ann-sub" x="226" y="143">tilt is positive</text>
+          <text class="ann" x="10" y="262">nozzle swings left</text>
+          <text class="ann-sub" x="10" y="277">(opposite the lean)</text>
+          <text class="ann" x="232" y="262">thrust line points</text>
+          <text class="ann" x="232" y="277">up and to the right,</text>
+          <text class="ann" x="232" y="292">pushing the tail right</text>
+        </svg>
+      </div>
+      <figcaption>Like balancing a broom on your hand: when it leans right, you move your hand right. The motor's thrust is the hand. In <code>TVCTEST</code> the nozzle must swing to the opposite side from the lean. If it doesn't, flip <code>SERVO_X_DIR</code> or <code>SERVO_Y_DIR</code>.</figcaption>
+    </figure>
+    <div class="prose">
+      <p>During the two burns, <code>runStateMachine()</code> calls <code>tvc.update(tiltX, tiltY, rateX, rateY, dt, true)</code> every 2 ms. Each axis is a PID controller whose output is a gimbal angle:</p>
+      <pre><code>gimbal = KP × tilt  +  KI × ∫tilt dt  +  KD × tilt_rate
+         = 0.40 × tilt + 0.10 × ∫tilt  + 0.12 × rate</code></pre>
+      <p><b>KP</b> pushes back harder the further it leans. <b>KD</b> pushes against the turning speed so it doesn't overshoot. <b>KI</b> slowly builds up a correction for a constant lean, such as a motor mounted slightly crooked or the CG off-centre.</p>
+      <p>Worked example from the code's own numbers: tilt 2°, turning at 3 °/s, no built-up integral. Gimbal = 0.40 × 2 + 0.12 × 3 = <b>1.16°</b>. <code>setGimbal()</code> multiplies by <code>GIMBAL_TO_SERVO_RATIO</code> (3) and <code>SERVO_US_PER_DEG</code> (10): 1.16 × 3 × 10 ≈ 35 µs, so the servo pulse goes from 1500 to <b>1535 µs</b>. <code>servoWriteUs()</code> then sets the Teensy's hardware PWM to 2,515 counts out of 32,768 at 50 Hz.</p>
+      <p>The total deflection is capped at <code>TVC_MAX_GIMBAL_DEG</code> (5°) and the integral at 2°, so a stuck sensor can't drive the mount into its stops.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= LANDING ================= -->
+<section id="landing">
+  <div class="sec-head">
+    <div class="tag">landing.h · motor_curves.h</div>
+    <h2>Landing timing: when to light motor 2</h2>
+  </div>
+  <div class="prose">
+    <p>A solid motor can't be throttled or turned off, so the one thing the computer controls is the moment the igniter gets power. In DESCENT, every 2 ms, <code>landingFireDecision()</code> runs two quick simulations from the current altitude and speed:</p>
+    <p><b>"If I fire now"</b> and <b>"if I fire one loop later"</b>. Each one plays out the igniter delay (free fall for 0.35 s), then the E16 thrust curve with the rocket getting lighter as propellant burns, drag, touchdown, and any hop back up on leftover thrust. Each returns the worst touchdown speed. The code fires the first moment that waiting would make the touchdown harder.</p>
+  </div>
+  <figure>
+    <div class="figbox">
+      <div class="ctitle"><b>Predicted touchdown speed vs. the height you light it</b><span>m/s, for this rocket falling from its 19.3 m apogee</span></div>
+      <div class="chart" id="c-v" tabindex="0" aria-label="Predicted touchdown speed against ignition height. Lighting at 19 metres gives about 20 metres per second; the curve falls to a sharp minimum of 0.65 metres per second at 15.2 metres, then rises steeply again; lighting at 9 metres gives about 19 metres per second."></div>
+      <div class="tip" id="v-tip" hidden></div>
+    </div>
+    <figcaption>Read left to right as the rocket falls. Light too early and the motor burns out in mid-air and the rocket drops the rest of the way. Light too late and it hits the ground with thrust left over, hops, and falls again. The good window is about 10 cm of height, roughly 11 ms of falling.</figcaption>
+  </figure>
+  <div class="two" style="margin-top:18px">
+    <div class="prose">
+      <p><b>Why your igniter delay matters so much.</b> The prediction assumes the motor lights exactly <code>IGNITER_DELAY_S</code> after power-on. If the real igniter is faster or slower, the motor effectively lights at the wrong height. The table shows what happens to a 1.1 kg rocket when the real delay differs from the setting.</p>
+      <p>That's why the log records <code>LANDING MOTOR LIT x s after fire</code> on every flight: it is your measured delay. Put the average back into <code>config.h</code>.</p>
+    </div>
+    <div class="tablebox" style="margin-top:0">
+      <table>
+        <thead><tr><th class="num">Igniter error</th><th class="num">Touchdown speed</th></tr></thead>
+        <tbody>
+          <tr><td class="num">50 ms early</td><td class="num">5.6 m/s</td></tr>
+          <tr><td class="num">20 ms early</td><td class="num">3.5 m/s</td></tr>
+          <tr><td class="num">10 ms early</td><td class="num">2.5 m/s</td></tr>
+          <tr><td class="num">exact</td><td class="num">0.2 m/s</td></tr>
+          <tr><td class="num">10 ms late</td><td class="num">3.3 m/s</td></tr>
+          <tr><td class="num">20 ms late</td><td class="num">4.5 m/s</td></tr>
+          <tr><td class="num">50 ms late</td><td class="num">6.7 m/s</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PYRO ================= -->
+<section id="pyro">
+  <div class="sec-head">
+    <div class="tag">pyro.h · TVC_Flight_Computer.ino</div>
+    <h2>Pyro safety: every gate must be open</h2>
+  </div>
+  <div class="prose">
+    <p>An igniter only gets current if the physical ARM switch is on <em>and</em> the software lets the MOSFET turn on. The software side is four separate checks inside <code>PyroChannel::fire()</code> and the state machine. If any one of them says no, the pin stays LOW.</p>
+  </div>
+  <figure>
+    <div class="figbox scroll">
+      <svg class="diagram" viewBox="0 0 1000 276" role="img" aria-label="Software gates: SIM_MODE is 0, software armed, state allows it, not fired before. All four must be true to set the Teensy pin HIGH, which turns on the MOSFET. Power path: LiPo, physical ARM switch, pyro rail, igniter, MOSFET, ground.">
+        <defs><marker id="pah" class="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <text class="colhead" x="20" y="16">SOFTWARE (pyro.h, .ino)</text>
+        <g class="node"><rect class="box" x="20" y="26" width="196" height="50" rx="4"/><text class="nm" x="118" y="47" text-anchor="middle">SIM_MODE 0</text><text class="sb" x="118" y="64" text-anchor="middle">the sim never drives HIGH</text></g>
+        <g class="node"><rect class="box" x="256" y="26" width="196" height="50" rx="4"/><text class="nm" x="354" y="47" text-anchor="middle">g_pyroArmed</text><text class="sb" x="354" y="64" text-anchor="middle">set by ARM, cleared by disarm()</text></g>
+        <g class="node"><rect class="box" x="492" y="26" width="196" height="50" rx="4"/><text class="nm" x="590" y="47" text-anchor="middle">state allows it</text><text class="sb" x="590" y="64" text-anchor="middle">T-0, or landing decision</text></g>
+        <g class="node"><rect class="box" x="728" y="26" width="196" height="50" rx="4"/><text class="nm" x="826" y="47" text-anchor="middle">!hasFired</text><text class="sb" x="826" y="64" text-anchor="middle">each channel fires once</text></g>
+        <text class="el" x="236" y="55" text-anchor="middle">AND</text><text class="el" x="472" y="55" text-anchor="middle">AND</text><text class="el" x="708" y="55" text-anchor="middle">AND</text>
+        <g class="edge"><path d="M826,76 V100 H620 V118" marker-end="url(#pah)"/></g>
+        <g class="node"><rect class="box" x="520" y="120" width="200" height="40" rx="4"/><text class="nm" x="620" y="145" text-anchor="middle">pin 5 / 6 HIGH for 1 s</text></g>
+        <g class="edge"><path d="M620,160 V190" marker-end="url(#pah)"/><text x="628" y="180">gate (100 Ω, 10 kΩ pull-down)</text></g>
+        <text class="colhead" x="20" y="186">POWER PATH</text>
+        <g class="node hw"><rect class="box" x="20" y="194" width="110" height="46" rx="3"/><text class="nm" x="75" y="221" text-anchor="middle">2S LiPo +</text></g>
+        <g class="node hw"><rect class="box" x="170" y="194" width="150" height="46" rx="3" style="stroke:var(--danger)"/><text class="nm" x="245" y="214" text-anchor="middle">ARM switch</text><text class="sb" x="245" y="230" text-anchor="middle">physical interlock</text></g>
+        <g class="node hw"><rect class="box" x="380" y="194" width="110" height="46" rx="3"/><text class="nm" x="435" y="221" text-anchor="middle">igniter</text></g>
+        <g class="node hw"><rect class="box" x="540" y="194" width="160" height="46" rx="3"/><text class="nm" x="620" y="214" text-anchor="middle">MOSFET</text><text class="sb" x="620" y="230" text-anchor="middle">drain → source</text></g>
+        <g class="node hw"><rect class="box" x="750" y="194" width="80" height="46" rx="3"/><text class="nm" x="790" y="221" text-anchor="middle">GND</text></g>
+        <g class="edge"><path d="M130,217 H168" marker-end="url(#pah)"/></g>
+        <g class="edge"><path d="M320,217 H378" marker-end="url(#pah)"/><text x="349" y="210" text-anchor="middle">rail</text></g>
+        <g class="edge"><path d="M490,217 H538" marker-end="url(#pah)"/></g>
+        <g class="edge"><path d="M700,217 H748" marker-end="url(#pah)"/></g>
+        <g class="edge"><path d="M349,240 V258 H860" /><text x="866" y="262">rail sense → pin 14</text></g>
+      </svg>
+    </div>
+    <figcaption>The physical switch is the one gate no software bug can open. The 10 kΩ pull-down holds the MOSFET off during the half second the Teensy is booting, before any code runs.</figcaption>
+  </figure>
+  <div class="callout" style="margin-top:20px"><b>Other automatic disarms.</b> The code also drops back to IDLE with pyros off if the rocket tips more than 10° on the pad, the ARM switch is turned off, 10 minutes pass without a launch, or (for a countdown started from the phone) the Wi-Fi heartbeat stops for 2 s. A misfire disarms and tells you to wait 60 s before approaching.</div>
+</section>
+
+<!-- ================= MESSAGES ================= -->
+<section id="messages">
+  <div class="sec-head">
+    <div class="tag">USB · Serial2 · ESP32</div>
+    <h2>Talking to the rocket</h2>
+  </div>
+  <div class="prose">
+    <p>Everything goes over plain text lines. Commands go in, two kinds of lines come out: <code>T,</code> telemetry 10 times a second, and <code>M,</code> messages whenever something happens. The ESP32 just relays them: it turns the phone's button presses into command lines on its UART (GPIO17 to Teensy pin 7) and serves the Teensy's lines (pin 8 to GPIO16) to the web page.</p>
+  </div>
+
+  <div class="subsec">
+    <h3>A telemetry line, taken apart</h3>
+    <p class="muted">Sent 22 ms before the landing motor was fired in the flight above.</p>
+    <div class="tline" aria-label="Telemetry line fields">
+      <div><b>T</b><span>type</span></div>
+      <div><b>20392</b><span>ms since power-on</span></div>
+      <div><b>DESCENT</b><span>state</span></div>
+      <div><b>15.46</b><span>altitude m</span></div>
+      <div><b>-8.71</b><span>vertical speed m/s</span></div>
+      <div><b>1.1</b><span>total tilt °</span></div>
+      <div><b>-0.96</b><span>tilt X °</span></div>
+      <div><b>0.53</b><span>tilt Y °</span></div>
+      <div><b>0.00</b><span>gimbal X °</span></div>
+      <div><b>0.00</b><span>gimbal Y °</span></div>
+      <div><b>8.00</b><span>pyro rail V</span></div>
+      <div><b>4.14</b><span>touchdown m/s if fired now</span></div>
+      <div><b>117</b><span>flags</span></div>
+    </div>
+    <p class="muted" style="max-width:76ch">Flags is a sum of bits: 1 pyros armed, 2 legs out, 4 ascent fired, 8 landing fired, 16 ascent igniter OK, 32 landing igniter OK, 64 sensors OK. So 117 = 64 + 32 + 16 + 4 + 1. The predicted touchdown speed (4.14) kept falling each loop. Eleven loops later it reached its lowest point and the code fired.</p>
+  </div>
+
+  <div class="subsec">
+    <h3>A launch from your phone</h3>
+    <figure style="margin-top:0">
+      <div class="figbox scroll">
+        <svg class="diagram" viewBox="0 0 900 330" role="img" aria-label="Sequence: the phone polls the ESP32 every 250 ms; each poll makes the ESP32 send HB to the Teensy. LAUNCH goes phone to ESP32 to Teensy and starts the countdown. Telemetry flows back. If heartbeats stop for 2 seconds during the countdown, the Teensy disarms.">
+          <defs><marker id="qah" class="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0 L10,5 L0,10 z"/></marker></defs>
+          <text class="nm" x="120" y="24" text-anchor="middle" style="font-family:var(--font-mono);font-size:12.5px;font-weight:600;fill:var(--ink)">phone page</text>
+          <text class="nm" x="450" y="24" text-anchor="middle" style="font-family:var(--font-mono);font-size:12.5px;font-weight:600;fill:var(--ink)">ESP32</text>
+          <text class="nm" x="780" y="24" text-anchor="middle" style="font-family:var(--font-mono);font-size:12.5px;font-weight:600;fill:var(--ink)">Teensy</text>
+          <line x1="120" y1="34" x2="120" y2="320" style="stroke:var(--rule)"/><line x1="450" y1="34" x2="450" y2="320" style="stroke:var(--rule)"/><line x1="780" y1="34" x2="780" y2="320" style="stroke:var(--rule)"/>
+          <g class="edge"><path d="M120,60 H446" marker-end="url(#qah)"/><text x="285" y="53" text-anchor="middle">GET /data every 250 ms</text></g>
+          <g class="edge"><path d="M450,72 H776" marker-end="url(#qah)"/><text x="615" y="65" text-anchor="middle">HB  (lastGroundRxMs = now)</text></g>
+          <g class="edge"><path d="M780,100 H454" marker-end="url(#qah)"/><text x="615" y="93" text-anchor="middle">T,… telemetry  ·  M,… messages</text></g>
+          <g class="edge"><path d="M446,112 H124" marker-end="url(#qah)"/><text x="285" y="105" text-anchor="middle">JSON: latest T line + new M lines</text></g>
+          <g class="edge on"><path d="M120,150 H446" marker-end="url(#qah)"/><text x="285" y="143" text-anchor="middle">GET /cmd?c=LAUNCH (after your confirm)</text></g>
+          <g class="edge on"><path d="M450,162 H776" marker-end="url(#qah)"/><text x="615" y="155" text-anchor="middle">LAUNCH</text></g>
+          <rect x="770" y="172" width="20" height="98" style="fill:var(--accent-wash);stroke:var(--accent)"/>
+          <text class="el" x="800" y="196">COUNTDOWN 10 s</text>
+          <text class="el" x="800" y="212">checks HB age</text>
+          <text class="el" x="800" y="228">every 2 ms</text>
+          <g class="edge"><path d="M120,200 H446" marker-end="url(#qah)"/><text x="285" y="193" text-anchor="middle">polls continue…</text></g>
+          <g class="edge"><path d="M450,212 H768" marker-end="url(#qah)"/><text x="615" y="205" text-anchor="middle">HB, HB, HB…</text></g>
+          <text class="ann" x="764" y="290" text-anchor="end">no HB for 2 s → disarm("ground link lost")</text>
+          <text class="ann" x="764" y="306" text-anchor="end" style="fill:var(--ink-2)">T-0 reached with HB alive → pyroAscent.fire()</text>
+        </svg>
+      </div>
+      <figcaption>The heartbeat is a dead-man switch. If your phone drops off Wi-Fi or you walk out of range during the countdown, the rocket stops counting and disarms by itself. Countdowns started from USB don't need it.</figcaption>
+    </figure>
+  </div>
+
+  <div class="subsec">
+    <h3>Commands</h3>
+    <div class="tablebox" style="margin-top:0">
+      <table>
+        <thead><tr><th>Command</th><th>Works in</th><th>What it does (<code>handleCommand()</code>)</th></tr></thead>
+        <tbody>
+          <tr><td><code>STATUS</code></td><td>any state</td><td>Sensor readings, battery, continuity, tilt, gyro bias, as <code>M,</code> lines.</td></tr>
+          <tr><td><code>ARM</code></td><td>IDLE</td><td>Checks rail ≥ 6.4 V, igniter continuity, tilt under 10°, then 2 s calibration.</td></tr>
+          <tr><td><code>DISARM</code></td><td>not in flight</td><td>Pyros off, back to IDLE.</td></tr>
+          <tr><td><code>LAUNCH</code></td><td>ARMED</td><td>Starts the 10 s countdown (with <code>ONBOARD_ASCENT_IGNITION 1</code>).</td></tr>
+          <tr><td><code>ABORT</code></td><td>countdown or flight</td><td>On the ground: stand down. In the air: never light the landing motor, fire the backup chute.</td></tr>
+          <tr><td><code>TVCTEST</code> / <code>STOP</code></td><td>IDLE / TVC_TEST</td><td>Live gimbal response while you tilt the rocket by hand.</td></tr>
+          <tr><td><code>SERVOTEST</code></td><td>IDLE</td><td>Sweeps the gimbal in two circles.</td></tr>
+          <tr><td><code>LEGS</code> / <code>LEGLOCK</code></td><td>IDLE</td><td>Fires or re-locks the leg release.</td></tr>
+          <tr><td><code>PLAN</code></td><td>any (USB output)</td><td>Prints the landing design table: the apogee your mass needs.</td></tr>
+          <tr><td><code>SAVE</code></td><td>not in flight</td><td>Writes the RAM log to the SD card now.</td></tr>
+          <tr><td><code>RESET</code></td><td>LANDED, ABORT, ERROR</td><td>Back to IDLE; in SIM_MODE also starts a fresh virtual rocket.</td></tr>
+          <tr><td><code>HB</code></td><td>sent by the ESP32</td><td>Heartbeat only, never typed.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= SETTINGS ================= -->
+<section id="settings">
+  <div class="sec-head">
+    <div class="tag">config.h</div>
+    <h2>Where to change what</h2>
+  </div>
+  <div class="prose"><p>The settings you'll touch most, the file that reads each one, and what changes when you do.</p></div>
+  <div class="tablebox">
+    <table>
+      <thead><tr><th>Setting</th><th class="num">Default</th><th>Read by</th><th>What it changes</th></tr></thead>
+      <tbody>
+        <tr><td><code>SIM_MODE</code></td><td class="num">1</td><td>.ino, pyro.h</td><td>1 = virtual rocket, pins never fire. 0 = real sensors and igniters.</td></tr>
+        <tr><td><code>ONBOARD_ASCENT_IGNITION</code></td><td class="num">1</td><td>.ino</td><td>1 = LAUNCH command lights motor 1. 0 = you use a launch controller.</td></tr>
+        <tr><td><code>LIFTOFF_MASS_KG</code></td><td class="num">1.100</td><td>landing.h, sim.h</td><td>The landing prediction and the PLAN table. Weigh the real rocket.</td></tr>
+        <tr><td><code>IGNITER_DELAY_S</code></td><td class="num">0.35</td><td>landing.h</td><td>When the landing motor is lit. The single most important number.</td></tr>
+        <tr><td><code>LANDING_DRAG_CDA_M2</code></td><td class="num">0.003</td><td>landing.h</td><td>Air drag in the prediction. Fit it from your first flight log.</td></tr>
+        <tr><td><code>TVC_KP</code> · <code>TVC_KI</code> · <code>TVC_KD</code></td><td class="num">0.40 · 0.10 · 0.12</td><td>tvc.h</td><td>How hard the gimbal reacts to tilt, built-up lean, and turning speed.</td></tr>
+        <tr><td><code>TVC_MAX_GIMBAL_DEG</code></td><td class="num">5.0</td><td>tvc.h</td><td>The largest total motor tilt ever commanded.</td></tr>
+        <tr><td><code>SERVO_X/Y_DIR</code></td><td class="num">1</td><td>tvc.h</td><td>Flip to −1 if TVCTEST moves an axis the wrong way.</td></tr>
+        <tr><td><code>SERVO_X/Y_CENTER_US</code></td><td class="num">1500</td><td>tvc.h</td><td>Trim so the motor points perfectly straight at zero.</td></tr>
+        <tr><td><code>GIMBAL_TO_SERVO_RATIO</code></td><td class="num">3.0</td><td>tvc.h</td><td>Servo-horn degrees per motor-mount degree (your linkage).</td></tr>
+        <tr><td><code>SERVO_PWM_HZ</code></td><td class="num">50</td><td>tvc.h</td><td>Pulse rate. B13DLM V2 allows 333 for less lag.</td></tr>
+        <tr><td><code>IMU_AXIS_FOR_BODY_*</code> · <code>IMU_SIGN_FOR_BODY_*</code></td><td class="num">X Y Z, +</td><td>.ino readImu()</td><td>How the MPU6050 is mounted relative to the rocket.</td></tr>
+        <tr><td><code>LAUNCH_DETECT_G</code> · <code>BURNOUT_DETECT_G</code></td><td class="num">1.5 · 0.4</td><td>.ino</td><td>Lift-off and burnout thresholds.</td></tr>
+        <tr><td><code>ABORT_TILT_DEG</code> · <code>LANDING_MAX_TILT_DEG</code></td><td class="num">30 · 15</td><td>.ino</td><td>Abort in flight; refuse to light the landing motor.</td></tr>
+        <tr><td><code>LEG_RELEASE_MODE</code> · <code>LEG_DEPLOY_ALT_M</code></td><td class="num">SERVO · 8.0</td><td>.ino</td><td>Servo latch or MOSFET burn-wire; when the legs drop.</td></tr>
+        <tr><td><code>PIN_PYRO_BACKUP</code></td><td class="num">−1</td><td>.ino, pyro.h</td><td>Set a pin to enable the backup parachute channel.</td></tr>
+        <tr><td><code>SIM_*</code></td><td class="num">various</td><td>sim.h</td><td>The virtual rocket: inertia, drag, gusts, igniter delay and jitter, ejection charge.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ================= READING ORDER ================= -->
+<section id="reading">
+  <div class="sec-head">
+    <div class="tag">Study plan</div>
+    <h2>Read the code in this order</h2>
+  </div>
+  <ol class="steps">
+    <li><b><code>config.h</code></b>: skim every setting so you know what knobs exist.</li>
+    <li><b><code>TVC_Flight_Computer.ino</code>, <code>setup()</code> and <code>loop()</code></b> (lines 722–846): the heartbeat. Match it against the loop list above.</li>
+    <li><b><code>runStateMachine()</code></b> (line 338): one <code>case</code> per state. Keep the state diagram open beside it.</li>
+    <li><b><code>handleCommand()</code></b> (line 555) and <b><code>tryArm()</code> / <code>finishCalibration()</code></b> (lines 270–336): how a command becomes action, and what ARM checks.</li>
+    <li><b><code>attitude.h</code></b>, with <code>qintegrate()</code> and <code>qrotateInv()</code> from <b><code>flight_types.h</code></b>: tilt.</li>
+    <li><b><code>nav_filter.h</code></b>: altitude and velocity. Read <code>predict()</code> then <code>updateBaro()</code>.</li>
+    <li><b><code>tvc.h</code></b>: 62 lines, the PID and the servo conversion.</li>
+    <li><b><code>landing.h</code></b>: <code>predictIgnitionNow()</code>, then <code>landingFireDecision()</code>.</li>
+    <li><b><code>pyro.h</code></b>: short, but read every line before you connect an igniter.</li>
+    <li><b><code>imu_mpu6050.h</code></b> and <b><code>baro_bmp3xx.h</code></b>: only needed when you're wiring real sensors.</li>
+    <li><b><code>sim.h</code></b>, <b><code>flight_log.h</code></b> and <b><code>ESP32_Ground_Link.ino</code></b>: when you want to change the virtual rocket, the log, or the phone page.</li>
+  </ol>
+</section>
+
+<!-- ================= ARDUINO ================= -->
+<section id="arduino">
+  <div class="sec-head">
+    <div class="tag">Setup</div>
+    <h2>Getting it into the Arduino IDE</h2>
+  </div>
+  <ol class="steps">
+    <li>Install <b>Arduino IDE 2</b>. In <i>File → Preferences → Additional boards manager URLs</i> add <code>https://www.pjrc.com/teensy/package_teensy_index.json</code>, then install <b>Teensy</b> from the Boards Manager.</li>
+    <li>Get the files: unzip the download, or clone the GitHub repository. Don't use <i>Sketch → Include Library → Add .ZIP Library</i>: that menu is for libraries, and this is a sketch.</li>
+    <li>Move the <code>TVC_Flight_Computer</code> folder into your sketchbook (<code>Documents/Arduino</code>). Keep the folder name: Arduino requires it to match <code>TVC_Flight_Computer.ino</code>.</li>
+    <li><i>File → Open</i> → <code>TVC_Flight_Computer.ino</code>. All 13 files open as tabs across the top of the editor.</li>
+    <li><i>Tools → Board</i> → <b>Teensy 4.1</b>, <i>USB Type</i> → <b>Serial</b>, pick the port, and click Upload.</li>
+    <li>Open the Serial Monitor at <b>115200</b> and set the line ending to <b>Newline</b>. Commands only run when a line ends. Type <code>ARM</code>, wait for <code>ARMED</code>, then type <code>LAUNCH</code>.</li>
+    <li>For the ground station, open <code>ESP32_Ground_Link/ESP32_Ground_Link.ino</code>, install the <b>esp32 by Espressif</b> board package, choose <b>ESP32 Dev Module</b>, and upload it to the ESP32.</li>
+  </ol>
+</section>
+
+</main>
+<footer class="wrap">Built from the code in the tvc-rocket repository and a run of its built-in simulator. The charts are simulated, not a real flight.</footer>
+
+<script>
+(function () {
+  "use strict";
+  // ---------------- data from the simulated flight ----------------
+  // [t s after lift-off, state, alt m, baro m, vel m/s, tiltX, tiltY, gimbalX, gimbalY, accBodyZ g]
+  var FLIGHT = [[-0.49,4,0.0,0.09,0.0,0.59,0.72,0.0,0.0,1.0],[-0.47,4,0.0,0.03,0.0,0.59,0.72,0.0,0.0,1.0],[-0.45,4,0.0,0.39,0.0,0.59,0.72,0.0,0.0,1.0],[-0.43,4,0.0,-0.15,0.0,0.59,0.72,0.0,0.0,1.0],[-0.41,4,0.0,-0.07,0.0,0.59,0.72,0.0,0.0,1.01],[-0.39,4,0.0,0.32,0.0,0.59,0.72,0.0,0.0,0.99],[-0.37,4,0.0,-0.06,0.0,0.59,0.72,0.0,0.0,1.0],[-0.35,4,0.0,-0.04,0.0,0.59,0.72,0.0,0.0,1.0],[-0.33,4,0.0,-0.04,0.0,0.59,0.72,0.0,0.0,1.0],[-0.31,4,0.0,0.14,0.0,0.59,0.72,0.0,0.0,0.99],[-0.29,4,0.0,0.14,0.0,0.59,0.72,0.0,0.0,0.99],[-0.27,4,0.0,-0.02,0.0,0.59,0.72,0.0,0.0,0.98],[-0.25,4,0.0,-0.49,0.0,0.59,0.72,0.0,0.0,1.0],[-0.23,4,0.0,0.01,0.0,0.59,0.72,0.0,0.0,0.99],[-0.21,4,0.0,0.21,0.0,0.59,0.72,0.0,0.0,1.0],[-0.19,4,0.0,0.01,0.0,0.59,0.72,0.0,0.0,1.0],[-0.17,4,0.0,0.08,0.0,0.59,0.72,0.0,0.0,1.0],[-0.15,4,0.0,0.11,0.0,0.59,0.72,0.0,0.0,1.0],[-0.13,4,0.0,0.11,0.0,0.59,0.72,0.0,0.0,1.0],[-0.11,4,0.0,0.11,0.0,0.59,0.72,0.0,0.0,1.01],[-0.09,4,0.0,-0.07,0.0,0.59,0.72,0.0,0.0,1.0],[-0.07,4,0.0,0.35,0.0,0.59,0.72,0.0,0.0,1.18],[-0.05,4,-0.03,-0.06,0.06,0.58,0.72,0.0,0.0,1.47],[-0.03,4,-0.02,-0.02,0.19,0.55,0.74,0.0,0.0,1.79],[-0.01,4,-0.06,-0.2,0.37,0.51,0.76,0.0,0.0,2.03],[0.01,5,-0.07,-0.14,0.59,0.43,0.79,-0.33,0.53,2.24],[0.03,5,-0.06,-0.09,0.85,0.35,0.82,-0.43,0.47,2.37],[0.05,5,-0.01,0.13,1.13,0.26,0.83,-0.48,0.38,2.41],[0.07,5,0.04,0.23,1.41,0.16,0.83,-0.54,0.35,2.38],[0.09,5,0.07,0.04,1.67,0.06,0.83,-0.56,0.3,2.29],[0.11,5,0.1,0.04,1.91,-0.03,0.82,-0.61,0.29,2.15],[0.13,5,0.17,0.31,2.13,-0.12,0.81,-0.61,0.26,2.04],[0.15,5,0.2,0.11,2.32,-0.21,0.8,-0.64,0.24,1.92],[0.17,5,0.24,0.08,2.47,-0.3,0.79,-0.66,0.24,1.81],[0.19,5,0.31,0.46,2.64,-0.38,0.77,-0.67,0.24,1.75],[0.21,5,0.34,0.12,2.76,-0.46,0.76,-0.66,0.23,1.7],[0.23,5,0.42,0.65,2.93,-0.53,0.75,-0.65,0.24,1.68],[0.25,5,0.46,0.16,3.02,-0.6,0.74,-0.66,0.26,1.65],[0.27,5,0.53,0.63,3.17,-0.67,0.74,-0.67,0.26,1.62],[0.29,5,0.59,0.52,3.28,-0.72,0.73,-0.67,0.27,1.65],[0.31,5,0.64,0.52,3.37,-0.78,0.73,-0.67,0.28,1.61],[0.33,5,0.71,0.52,3.49,-0.83,0.72,-0.65,0.27,1.62],[0.35,5,0.76,0.47,3.55,-0.88,0.72,-0.64,0.26,1.61],[0.37,5,0.85,0.96,3.72,-0.92,0.72,-0.61,0.28,1.62],[0.39,5,0.94,1.02,3.88,-0.95,0.71,-0.6,0.26,1.6],[0.41,5,1.01,0.89,3.97,-0.98,0.71,-0.58,0.25,1.61],[0.43,5,1.12,1.35,4.17,-1.0,0.7,-0.57,0.26,1.56],[0.45,5,1.22,1.32,4.33,-1.02,0.7,-0.56,0.26,1.57],[0.47,5,1.31,1.3,4.45,-1.04,0.7,-0.54,0.26,1.56],[0.49,5,1.42,1.57,4.63,-1.05,0.69,-0.53,0.25,1.57],[0.51,5,1.5,1.33,4.68,-1.06,0.69,-0.54,0.26,1.59],[0.53,5,1.59,1.56,4.79,-1.07,0.69,-0.54,0.27,1.58],[0.55,5,1.69,1.56,4.9,-1.08,0.68,-0.53,0.25,1.58],[0.57,5,1.79,1.75,5.03,-1.09,0.68,-0.53,0.27,1.56],[0.59,5,1.88,1.69,5.1,-1.1,0.68,-0.52,0.27,1.56],[0.61,5,1.99,2.0,5.24,-1.11,0.68,-0.53,0.28,1.56],[0.63,5,2.09,1.98,5.33,-1.11,0.68,-0.53,0.29,1.58],[0.65,5,2.2,2.12,5.44,-1.11,0.68,-0.54,0.29,1.58],[0.67,5,2.31,2.28,5.56,-1.12,0.68,-0.52,0.28,1.56],[0.69,5,2.42,2.4,5.67,-1.12,0.68,-0.54,0.28,1.55],[0.71,5,2.55,2.62,5.82,-1.12,0.67,-0.52,0.26,1.57],[0.73,5,2.69,2.83,5.99,-1.12,0.67,-0.53,0.27,1.59],[0.75,5,2.81,2.88,6.12,-1.12,0.67,-0.52,0.26,1.55],[0.77,5,2.94,2.88,6.23,-1.12,0.66,-0.53,0.26,1.56],[0.79,5,3.08,3.11,6.4,-1.12,0.66,-0.51,0.27,1.57],[0.81,5,3.23,3.21,6.54,-1.12,0.65,-0.52,0.26,1.56],[0.83,5,3.38,3.45,6.71,-1.12,0.65,-0.54,0.25,1.55],[0.85,5,3.5,3.29,6.77,-1.12,0.65,-0.52,0.27,1.55],[0.87,5,3.59,3.23,6.78,-1.12,0.64,-0.52,0.25,1.56],[0.89,5,3.71,3.46,6.82,-1.12,0.64,-0.52,0.29,1.56],[0.91,5,3.86,3.96,6.98,-1.11,0.64,-0.52,0.29,1.55],[0.93,5,3.98,3.77,7.02,-1.11,0.64,-0.53,0.28,1.54],[0.95,5,4.13,4.2,7.16,-1.1,0.64,-0.5,0.29,1.58],[0.97,5,4.26,4.16,7.23,-1.1,0.64,-0.5,0.28,1.55],[0.99,5,4.41,4.16,7.34,-1.09,0.64,-0.48,0.28,1.56],[1.01,5,4.53,4.17,7.37,-1.08,0.64,-0.49,0.28,1.55],[1.03,5,4.67,4.48,7.46,-1.07,0.63,-0.49,0.27,1.55],[1.05,5,4.82,4.79,7.59,-1.07,0.63,-0.5,0.25,1.57],[1.07,5,4.99,5.02,7.74,-1.06,0.62,-0.51,0.25,1.54],[1.09,5,5.17,5.23,7.9,-1.06,0.62,-0.51,0.26,1.54],[1.11,5,5.31,5.13,7.97,-1.05,0.62,-0.51,0.28,1.57],[1.13,5,5.49,5.55,8.12,-1.05,0.61,-0.51,0.26,1.55],[1.15,5,5.65,5.58,8.21,-1.05,0.61,-0.51,0.27,1.55],[1.17,5,5.82,5.88,8.34,-1.04,0.6,-0.51,0.26,1.55],[1.19,5,5.97,5.82,8.4,-1.04,0.6,-0.51,0.28,1.54],[1.21,5,6.14,5.82,8.51,-1.03,0.59,-0.51,0.26,1.54],[1.23,5,6.31,6.17,8.62,-1.03,0.59,-0.51,0.27,1.56],[1.25,5,6.48,6.28,8.7,-1.02,0.59,-0.49,0.26,1.54],[1.27,5,6.61,6.19,8.7,-1.02,0.58,-0.48,0.27,1.55],[1.29,5,6.77,6.52,8.76,-1.01,0.58,-0.48,0.28,1.54],[1.31,5,6.98,7.14,8.95,-1.0,0.58,-0.49,0.28,1.54],[1.33,5,7.16,7.08,9.06,-0.99,0.58,-0.49,0.29,1.55],[1.35,5,7.37,7.5,9.23,-0.99,0.58,-0.5,0.3,1.55],[1.37,5,7.57,7.69,9.4,-0.98,0.58,-0.49,0.3,1.54],[1.39,5,7.81,8.15,9.63,-0.98,0.58,-0.49,0.29,1.53],[1.41,5,8.01,8.1,9.77,-0.97,0.58,-0.49,0.3,1.53],[1.43,5,8.21,8.1,9.88,-0.96,0.58,-0.48,0.28,1.54],[1.45,5,8.39,8.05,9.93,-0.96,0.57,-0.48,0.28,1.54],[1.47,5,8.59,8.47,10.05,-0.95,0.57,-0.47,0.26,1.53],[1.49,5,8.79,8.63,10.14,-0.94,0.56,-0.46,0.24,1.53],[1.51,5,8.99,8.82,10.23,-0.93,0.55,-0.48,0.22,1.53],[1.53,5,9.21,9.19,10.37,-0.92,0.54,-0.49,0.22,1.53],[1.55,5,9.4,9.23,10.44,-0.92,0.53,-0.48,0.2,1.52],[1.57,5,9.61,9.53,10.54,-0.91,0.51,-0.51,0.19,1.53],[1.59,5,9.84,9.91,10.68,-0.91,0.5,-0.5,0.19,1.52],[1.61,5,10.06,10.08,10.8,-0.91,0.48,-0.51,0.18,1.52],[1.63,5,10.27,10.24,10.89,-0.91,0.47,-0.51,0.18,1.52],[1.65,5,10.49,10.24,10.99,-0.91,0.46,-0.52,0.19,1.51],[1.67,5,10.69,10.38,11.05,-0.91,0.44,-0.52,0.19,1.48],[1.69,5,10.89,10.54,11.08,-0.91,0.43,-0.52,0.2,1.49],[1.71,5,11.09,10.75,11.11,-0.91,0.43,-0.53,0.2,1.45],[1.73,5,11.32,11.25,11.21,-0.91,0.42,-0.52,0.21,1.39],[1.75,5,11.54,11.39,11.26,-0.91,0.41,-0.52,0.2,1.26],[1.77,5,11.77,11.74,11.32,-0.9,0.41,-0.53,0.22,1.12],[1.79,5,12.01,11.97,11.34,-0.9,0.4,-0.52,0.21,0.98],[1.81,5,12.21,11.97,11.24,-0.9,0.39,-0.52,0.22,0.81],[1.83,5,12.41,12.25,11.14,-0.9,0.39,-0.53,0.21,0.67],[1.85,5,12.64,12.66,11.06,-0.89,0.38,-0.51,0.22,0.52],[1.87,5,12.86,12.66,10.95,-0.89,0.38,-0.51,0.2,0.37],[1.89,5,13.11,13.14,10.9,-0.89,0.37,-0.5,0.21,0.21],[1.91,5,13.34,13.27,10.77,-0.88,0.37,-0.5,0.18,0.13],[1.93,6,13.54,13.27,10.55,-0.88,0.36,0.0,0.0,0.02],[1.95,6,13.73,13.54,10.32,-0.87,0.35,0.0,0.0,-0.01],[1.97,6,13.97,14.12,10.22,-0.86,0.34,0.0,0.0,-0.0],[1.99,6,14.17,14.05,10.01,-0.85,0.34,0.0,0.0,-0.01],[2.01,6,14.38,14.41,9.84,-0.84,0.34,0.0,0.0,-0.02],[2.03,6,14.59,14.67,9.69,-0.83,0.33,0.0,0.0,-0.01],[2.05,6,14.8,14.89,9.54,-0.82,0.33,0.0,0.0,0.01],[2.07,6,15.0,15.13,9.39,-0.81,0.32,0.0,0.0,0.01],[2.09,6,15.19,15.13,9.19,-0.79,0.32,0.0,0.0,0.01],[2.11,6,15.37,15.17,8.99,-0.78,0.31,0.0,0.0,0.01],[2.13,6,15.56,15.53,8.83,-0.77,0.31,0.0,0.0,-0.0],[2.15,6,15.72,15.48,8.6,-0.76,0.31,0.0,0.0,-0.01],[2.17,6,15.89,15.77,8.4,-0.75,0.31,0.0,0.0,0.02],[2.19,6,16.05,15.93,8.19,-0.73,0.3,0.0,0.0,-0.01],[2.21,6,16.2,16.04,7.96,-0.72,0.3,0.0,0.0,0.0],[2.23,6,16.36,16.37,7.79,-0.71,0.3,0.0,0.0,0.02],[2.25,6,16.54,16.71,7.66,-0.7,0.3,0.0,0.0,0.01],[2.27,6,16.7,16.7,7.48,-0.69,0.29,0.0,0.0,0.01],[2.29,6,16.82,16.59,7.2,-0.68,0.29,0.0,0.0,-0.0],[2.31,6,16.96,16.59,7.01,-0.67,0.29,0.0,0.0,0.01],[2.33,6,17.11,17.12,6.87,-0.66,0.29,0.0,0.0,0.02],[2.35,6,17.29,17.51,6.79,-0.66,0.28,0.0,0.0,0.01],[2.37,6,17.44,17.48,6.64,-0.65,0.28,0.0,0.0,0.02],[2.39,6,17.55,17.31,6.39,-0.64,0.27,0.0,0.0,0.01],[2.41,6,17.65,17.4,6.13,-0.64,0.26,0.0,0.0,0.02],[2.43,6,17.78,17.82,5.96,-0.63,0.26,0.0,0.0,0.02],[2.45,6,17.89,17.79,5.75,-0.62,0.25,0.0,0.0,0.02],[2.47,6,18.0,17.91,5.53,-0.62,0.24,0.0,0.0,0.01],[2.49,6,18.09,17.99,5.3,-0.61,0.23,0.0,0.0,0.01],[2.51,6,18.2,18.22,5.12,-0.6,0.21,0.0,0.0,0.01],[2.53,6,18.3,18.22,4.92,-0.59,0.2,0.0,0.0,0.02],[2.55,6,18.37,18.08,4.66,-0.58,0.19,0.0,0.0,0.01],[2.57,6,18.46,18.4,4.47,-0.57,0.17,0.0,0.0,-0.02],[2.59,6,18.57,18.68,4.34,-0.56,0.16,0.0,0.0,0.01],[2.61,6,18.65,18.58,4.14,-0.55,0.15,0.0,0.0,0.03],[2.63,6,18.68,18.23,3.8,-0.54,0.14,0.0,0.0,0.02],[2.65,6,18.76,18.75,3.61,-0.53,0.13,0.0,0.0,0.01],[2.67,6,18.83,18.86,3.44,-0.53,0.12,0.0,0.0,0.02],[2.69,6,18.89,18.79,3.22,-0.53,0.12,0.0,0.0,-0.0],[2.71,6,18.92,18.67,2.94,-0.53,0.11,0.0,0.0,0.01],[2.73,6,18.98,18.98,2.75,-0.53,0.1,0.0,0.0,0.03],[2.75,6,19.03,18.98,2.55,-0.53,0.09,0.0,0.0,0.01],[2.77,6,19.07,18.95,2.33,-0.53,0.08,0.0,0.0,0.02],[2.79,6,19.11,19.02,2.12,-0.53,0.07,0.0,0.0,0.02],[2.81,6,19.16,19.19,1.95,-0.54,0.06,0.0,0.0,0.01],[2.83,6,19.17,19.01,1.71,-0.54,0.05,0.0,0.0,0.04],[2.85,6,19.16,18.82,1.4,-0.55,0.04,0.0,0.0,0.03],[2.87,6,19.2,19.26,1.24,-0.56,0.04,0.0,0.0,0.02],[2.89,6,19.26,19.56,1.15,-0.57,0.03,0.0,0.0,0.03],[2.91,6,19.24,18.93,0.85,-0.58,0.03,0.0,0.0,0.03],[2.93,6,19.27,19.36,0.69,-0.59,0.02,0.0,0.0,0.0],[2.95,6,19.28,19.28,0.5,-0.6,0.02,0.0,0.0,0.02],[2.97,6,19.29,19.28,0.31,-0.61,0.02,0.0,0.0,0.01],[2.99,6,19.3,19.32,0.12,-0.62,0.02,0.0,0.0,0.04],[3.01,6,19.3,19.3,-0.07,-0.64,0.02,0.0,0.0,0.02],[3.03,6,19.27,19.09,-0.32,-0.65,0.01,0.0,0.0,0.03],[3.05,6,19.23,18.97,-0.61,-0.66,0.01,0.0,0.0,0.02],[3.07,6,19.21,19.23,-0.8,-0.67,0.01,0.0,0.0,0.02],[3.09,6,19.24,19.62,-0.86,-0.69,0.01,0.0,0.0,0.0],[3.11,7,19.23,19.24,-1.05,-0.7,0.01,0.0,0.0,0.04],[3.13,7,19.2,19.19,-1.25,-0.71,0.01,0.0,0.0,0.02],[3.15,7,19.2,19.37,-1.38,-0.72,0.02,0.0,0.0,0.02],[3.17,7,19.17,19.23,-1.56,-0.73,0.02,0.0,0.0,0.03],[3.19,7,19.14,19.23,-1.75,-0.73,0.02,0.0,0.0,0.03],[3.21,7,19.12,19.25,-1.91,-0.74,0.02,0.0,0.0,0.02],[3.23,7,19.09,19.24,-2.06,-0.74,0.03,0.0,0.0,-0.01],[3.25,7,19.02,18.81,-2.33,-0.75,0.03,0.0,0.0,0.02],[3.27,7,18.94,18.76,-2.6,-0.75,0.04,0.0,0.0,0.01],[3.29,7,18.92,19.21,-2.7,-0.76,0.05,0.0,0.0,0.02],[3.31,7,18.85,18.73,-2.94,-0.77,0.06,0.0,0.0,0.02],[3.33,7,18.79,18.81,-3.13,-0.77,0.06,0.0,0.0,0.04],[3.35,7,18.73,18.8,-3.3,-0.78,0.07,0.0,0.0,0.02],[3.37,7,18.66,18.66,-3.5,-0.79,0.08,0.0,0.0,0.02],[3.39,7,18.57,18.38,-3.76,-0.8,0.09,0.0,0.0,0.01],[3.41,7,18.49,18.38,-3.95,-0.8,0.11,0.0,0.0,0.03],[3.43,7,18.41,18.55,-4.12,-0.81,0.12,0.0,0.0,0.03],[3.45,7,18.33,18.38,-4.32,-0.82,0.13,0.0,0.0,0.03],[3.47,7,18.27,18.56,-4.43,-0.83,0.14,0.0,0.0,0.02],[3.49,7,18.21,18.5,-4.54,-0.83,0.15,0.0,0.0,0.04],[3.51,7,18.12,18.16,-4.73,-0.84,0.16,0.0,0.0,0.01],[3.53,7,18.01,17.96,-4.95,-0.85,0.17,0.0,0.0,0.04],[3.55,7,17.94,18.21,-5.06,-0.85,0.18,0.0,0.0,0.02],[3.57,7,17.83,17.79,-5.27,-0.86,0.2,0.0,0.0,0.03],[3.59,7,17.73,17.79,-5.44,-0.87,0.21,0.0,0.0,0.03],[3.61,7,17.62,17.68,-5.61,-0.87,0.22,0.0,0.0,0.03],[3.63,7,17.51,17.68,-5.8,-0.88,0.23,0.0,0.0,0.02],[3.65,7,17.4,17.57,-5.97,-0.89,0.25,0.0,0.0,0.02],[3.67,7,17.28,17.35,-6.17,-0.89,0.26,0.0,0.0,0.04],[3.69,7,17.16,17.32,-6.33,-0.9,0.28,0.0,0.0,0.02],[3.71,7,17.03,17.07,-6.54,-0.91,0.3,0.0,0.0,0.04],[3.73,7,16.9,16.97,-6.72,-0.92,0.32,0.0,0.0,0.05],[3.75,7,16.75,16.7,-6.95,-0.93,0.34,0.0,0.0,0.05],[3.77,7,16.59,16.55,-7.17,-0.93,0.36,0.0,0.0,0.03],[3.79,7,16.43,16.3,-7.42,-0.94,0.38,0.0,0.0,0.04],[3.81,7,16.29,16.4,-7.57,-0.94,0.41,0.0,0.0,0.02],[3.83,7,16.08,15.67,-7.91,-0.95,0.43,0.0,0.0,0.03],[3.85,7,15.92,15.67,-8.1,-0.95,0.46,0.0,0.0,0.04],[3.87,7,15.76,15.94,-8.28,-0.96,0.49,0.0,0.0,0.03],[3.89,7,15.57,15.52,-8.54,-0.96,0.52,0.0,0.0,0.04],[3.91,7,15.37,15.29,-8.8,-0.97,0.54,0.0,0.0,0.04],[3.93,8,15.17,15.13,-9.04,-0.97,0.57,0.0,0.0,0.05],[3.95,8,15.01,15.21,-9.19,-0.98,0.6,0.0,0.0,0.04],[3.97,8,14.81,14.82,-9.4,-0.98,0.63,0.0,0.0,0.04],[3.99,8,14.61,14.62,-9.61,-0.99,0.66,0.0,0.0,0.03],[4.01,8,14.41,14.35,-9.83,-1.0,0.69,0.0,0.0,0.04],[4.03,8,14.2,14.18,-10.04,-1.01,0.72,0.0,0.0,0.03],[4.05,8,14.02,14.21,-10.16,-1.02,0.75,0.0,0.0,0.04],[4.07,8,13.82,14.21,-10.35,-1.03,0.78,0.0,0.0,0.04],[4.09,8,13.62,13.92,-10.5,-1.04,0.82,0.0,0.0,0.05],[4.11,8,13.39,13.42,-10.74,-1.06,0.85,0.0,0.0,0.05],[4.13,8,13.14,13.02,-11.03,-1.07,0.88,0.0,0.0,0.04],[4.15,8,12.9,12.9,-11.26,-1.08,0.92,0.0,0.0,0.04],[4.17,8,12.67,12.8,-11.44,-1.1,0.95,0.0,0.0,0.07],[4.19,8,12.46,12.64,-11.6,-1.11,0.99,0.0,0.0,0.03],[4.21,8,12.21,12.18,-11.82,-1.12,1.03,0.0,0.0,0.04],[4.23,8,11.99,12.23,-11.94,-1.14,1.07,0.0,0.0,0.04],[4.25,8,11.79,12.05,-12.04,-1.15,1.11,0.0,0.0,0.05],[4.27,8,11.55,11.63,-12.2,-1.16,1.15,0.0,0.0,0.06],[4.29,8,11.31,11.63,-12.38,-1.17,1.19,0.0,0.0,0.16],[4.31,8,11.09,11.51,-12.45,-1.19,1.23,0.0,0.0,0.33],[4.33,8,10.8,10.77,-12.64,-1.2,1.27,0.0,0.0,0.6],[4.35,8,10.56,10.81,-12.66,-1.22,1.32,0.0,0.0,0.95],[4.37,8,10.29,10.3,-12.69,-1.25,1.37,0.0,0.0,1.26],[4.39,8,10.05,10.25,-12.57,-1.29,1.43,0.0,0.0,1.6],[4.41,8,9.79,9.8,-12.45,-1.35,1.49,0.0,0.0,1.89],[4.43,8,9.51,9.36,-12.33,-1.42,1.56,0.0,0.0,2.16],[4.45,9,9.24,9.12,-12.14,-1.52,1.65,-1.3,1.14,2.36],[4.47,9,9.03,9.22,-11.8,-1.62,1.73,-1.22,1.02,2.47],[4.49,9,8.8,8.86,-11.48,-1.69,1.76,-1.01,0.77,2.54],[4.51,9,8.57,8.86,-11.18,-1.71,1.77,-0.86,0.61,2.49],[4.53,9,8.4,8.93,-10.78,-1.72,1.74,-0.75,0.48,2.39],[4.55,9,8.19,8.4,-10.51,-1.71,1.71,-0.68,0.4,2.24],[4.57,9,7.97,8.04,-10.31,-1.7,1.66,-0.63,0.36,2.12],[4.59,9,7.76,7.86,-10.12,-1.67,1.61,-0.6,0.31,2.0],[4.61,9,7.52,7.31,-10.04,-1.64,1.56,-0.56,0.28,1.89],[4.63,9,7.34,7.57,-9.83,-1.61,1.5,-0.54,0.24,1.82],[4.65,9,7.16,7.27,-9.65,-1.58,1.44,-0.52,0.22,1.78],[4.67,9,6.93,6.69,-9.6,-1.55,1.39,-0.51,0.22,1.76],[4.69,9,6.73,6.7,-9.47,-1.52,1.33,-0.49,0.19,1.75],[4.71,9,6.56,6.71,-9.27,-1.48,1.28,-0.47,0.18,1.71],[4.73,9,6.38,6.71,-9.13,-1.45,1.22,-0.46,0.17,1.71],[4.75,9,6.21,6.52,-8.94,-1.41,1.17,-0.46,0.18,1.7],[4.77,9,6.03,6.15,-8.81,-1.38,1.13,-0.43,0.18,1.69],[4.79,9,5.84,5.85,-8.72,-1.35,1.08,-0.44,0.19,1.68],[4.81,9,5.72,6.19,-8.46,-1.31,1.04,-0.42,0.19,1.67],[4.83,9,5.55,5.59,-8.34,-1.28,1.0,-0.43,0.19,1.67],[4.85,9,5.38,5.44,-8.21,-1.25,0.97,-0.42,0.19,1.68],[4.87,9,5.2,5.09,-8.14,-1.22,0.93,-0.42,0.19,1.65],[4.89,9,5.05,5.21,-7.96,-1.2,0.9,-0.43,0.2,1.65],[4.91,9,4.88,4.83,-7.86,-1.17,0.87,-0.43,0.18,1.65],[4.93,9,4.71,4.58,-7.78,-1.15,0.84,-0.43,0.19,1.67],[4.95,9,4.56,4.58,-7.65,-1.13,0.81,-0.42,0.2,1.64],[4.97,9,4.39,4.43,-7.56,-1.1,0.78,-0.41,0.2,1.66],[4.99,9,4.23,4.23,-7.47,-1.08,0.76,-0.42,0.19,1.65],[5.01,9,4.09,4.28,-7.32,-1.07,0.74,-0.42,0.21,1.64],[5.03,9,3.97,4.25,-7.12,-1.05,0.71,-0.42,0.2,1.65],[5.05,9,3.82,3.81,-7.02,-1.03,0.69,-0.42,0.2,1.65],[5.07,9,3.69,3.84,-6.87,-1.02,0.67,-0.42,0.19,1.64],[5.09,9,3.58,3.81,-6.67,-1.0,0.65,-0.43,0.18,1.62],[5.11,9,3.47,3.64,-6.49,-0.99,0.63,-0.44,0.18,1.63],[5.13,9,3.34,3.32,-6.38,-0.98,0.61,-0.45,0.19,1.64],[5.15,9,3.2,3.12,-6.28,-0.97,0.6,-0.44,0.21,1.64],[5.17,9,3.07,3.12,-6.16,-0.96,0.59,-0.47,0.21,1.63],[5.19,9,2.92,2.79,-6.12,-0.96,0.58,-0.48,0.24,1.64],[5.21,9,2.82,3.08,-5.93,-0.96,0.57,-0.49,0.24,1.64],[5.23,9,2.69,2.66,-5.85,-0.96,0.56,-0.5,0.24,1.66],[5.25,9,2.61,2.94,-5.63,-0.96,0.55,-0.5,0.25,1.66],[5.27,9,2.49,2.49,-5.52,-0.96,0.55,-0.51,0.26,1.64],[5.29,9,2.36,2.24,-5.46,-0.95,0.54,-0.5,0.23,1.62],[5.31,9,2.25,2.25,-5.34,-0.95,0.53,-0.5,0.23,1.63],[5.33,9,2.14,2.19,-5.21,-0.95,0.53,-0.5,0.24,1.62],[5.35,9,2.06,2.25,-5.03,-0.95,0.52,-0.51,0.24,1.63],[5.37,9,1.98,2.11,-4.86,-0.95,0.51,-0.49,0.23,1.62],[5.39,9,1.89,2.11,-4.73,-0.94,0.51,-0.49,0.22,1.62],[5.41,9,1.79,1.85,-4.62,-0.94,0.5,-0.48,0.21,1.64],[5.43,9,1.71,1.91,-4.45,-0.94,0.49,-0.49,0.22,1.63],[5.45,9,1.64,1.77,-4.3,-0.93,0.48,-0.49,0.21,1.62],[5.47,9,1.55,1.57,-4.18,-0.93,0.47,-0.49,0.2,1.64],[5.49,9,1.48,1.58,-4.04,-0.92,0.46,-0.48,0.22,1.63],[5.51,9,1.38,1.25,-3.97,-0.92,0.46,-0.48,0.22,1.61],[5.53,9,1.3,1.35,-3.83,-0.91,0.45,-0.47,0.2,1.64],[5.55,9,1.24,1.34,-3.68,-0.91,0.44,-0.47,0.22,1.64],[5.57,9,1.16,1.09,-3.58,-0.9,0.44,-0.47,0.21,1.62],[5.59,9,1.11,1.3,-3.4,-0.89,0.43,-0.48,0.23,1.63],[5.61,9,1.04,1.3,-3.27,-0.89,0.43,-0.46,0.23,1.62],[5.63,9,1.01,1.29,-3.07,-0.88,0.43,-0.47,0.24,1.61],[5.65,9,0.97,1.2,-2.88,-0.88,0.43,-0.47,0.25,1.63],[5.67,9,0.94,1.16,-2.7,-0.87,0.42,-0.47,0.24,1.62],[5.69,9,0.86,0.72,-2.64,-0.86,0.42,-0.47,0.25,1.62],[5.71,9,0.77,0.47,-2.63,-0.86,0.42,-0.48,0.23,1.62],[5.73,9,0.68,0.41,-2.61,-0.86,0.42,-0.49,0.23,1.62],[5.75,9,0.59,0.36,-2.58,-0.85,0.41,-0.49,0.24,1.64],[5.77,9,0.56,0.66,-2.43,-0.85,0.41,-0.5,0.23,1.62],[5.79,9,0.51,0.48,-2.32,-0.85,0.41,-0.51,0.24,1.63],[5.81,9,0.47,0.53,-2.17,-0.85,0.4,-0.52,0.23,1.64],[5.83,9,0.43,0.53,-2.05,-0.85,0.4,-0.53,0.24,1.62],[5.85,9,0.37,0.31,-1.97,-0.86,0.4,-0.53,0.23,1.6],[5.87,9,0.38,0.7,-1.74,-0.86,0.4,-0.52,0.23,1.61],[5.89,9,0.37,0.63,-1.53,-0.86,0.39,-0.51,0.22,1.59],[5.91,9,0.35,0.41,-1.4,-0.86,0.39,-0.53,0.22,1.61],[5.93,9,0.32,0.33,-1.28,-0.86,0.39,-0.52,0.23,1.62],[5.95,9,0.3,-5.81,-0.54,-0.86,0.38,-0.52,0.23,5.54],[5.97,9,0.3,-5.83,0.12,-0.86,0.38,-0.52,0.24,1.61],[5.99,9,0.3,0.26,0.22,-0.85,0.38,-0.51,0.26,1.61],[6.01,9,0.26,0.0,0.23,-0.85,0.39,-0.53,0.25,1.6],[6.03,9,0.28,0.33,0.37,-0.85,0.39,-0.52,0.25,1.62],[6.05,9,0.28,0.33,0.49,-0.85,0.39,-0.52,0.27,1.6],[6.07,9,0.3,0.32,0.62,-0.85,0.39,-0.53,0.27,1.6],[6.09,9,0.3,0.2,0.7,-0.85,0.39,-0.52,0.27,1.59],[6.11,9,0.33,0.45,0.86,-0.85,0.4,-0.54,0.27,1.57],[6.13,9,0.37,0.48,1.02,-0.85,0.4,-0.54,0.26,1.55],[6.15,9,0.35,0.07,1.03,-0.85,0.4,-0.55,0.26,1.55],[6.17,9,0.35,0.16,1.06,-0.85,0.4,-0.53,0.27,1.46],[6.19,9,0.34,0.14,1.06,-0.85,0.4,-0.57,0.29,1.31],[6.21,9,0.35,0.28,1.08,-0.86,0.4,-0.56,0.28,1.16],[6.23,9,0.33,0.01,0.98,-0.86,0.41,-0.57,0.3,1.01],[6.25,9,0.33,0.17,0.92,-0.86,0.41,-0.58,0.3,0.89],[6.27,9,0.35,0.17,0.87,-0.87,0.42,-0.58,0.31,0.7],[6.29,9,0.34,0.14,0.73,-0.87,0.43,-0.58,0.31,0.55],[6.31,9,0.34,0.2,0.58,-0.88,0.43,-0.6,0.29,0.37],[6.33,9,0.36,0.45,0.48,-0.88,0.43,-0.59,0.3,0.27],[6.35,9,0.3,-0.21,0.14,-0.88,0.43,-0.58,0.29,0.15],[6.37,9,0.31,0.42,-0.01,-0.88,0.44,-0.58,0.3,0.02],[6.39,9,0.3,0.19,-0.24,-0.88,0.44,-0.56,0.3,0.03],[6.41,9,0.27,0.07,-0.5,-0.88,0.44,-0.57,0.27,0.04],[6.43,9,0.24,0.18,-0.72,-0.88,0.44,-0.57,0.27,0.01],[6.45,9,0.19,-0.12,-1.02,-0.88,0.43,-0.57,0.27,0.01],[6.47,9,0.16,0.14,-1.22,-0.87,0.43,-0.54,0.27,0.03],[6.49,9,0.14,0.14,-1.42,-0.87,0.43,-0.53,0.28,0.02],[6.51,9,0.08,-0.12,-1.52,-0.87,0.43,-0.57,0.31,1.01],[6.53,9,0.04,0.04,-1.53,-0.87,0.43,-0.57,0.31,1.02],[6.55,9,-0.02,-0.21,-1.6,-0.87,0.43,-0.56,0.32,1.0],[6.57,9,-0.05,-0.04,-1.61,-0.87,0.43,-0.57,0.31,0.99],[6.59,9,-0.04,0.3,-1.49,-0.87,0.43,-0.57,0.32,0.98],[6.61,9,-0.09,-0.25,-1.56,-0.87,0.43,-0.57,0.33,1.0],[6.63,9,-0.12,-0.12,-1.56,-0.87,0.43,-0.59,0.32,1.0],[6.65,9,-0.15,-0.11,-1.55,-0.87,0.43,-0.57,0.33,1.01],[6.67,9,-0.15,0.06,-1.48,-0.87,0.43,-0.57,0.33,0.99],[6.69,9,-0.18,-0.18,-1.48,-0.87,0.43,-0.58,0.32,1.0],[6.71,9,-0.21,-0.18,-1.48,-0.87,0.43,-0.58,0.31,0.99],[6.73,9,-0.23,-0.12,-1.45,-0.87,0.43,-0.59,0.32,1.01],[6.75,9,-0.23,-0.01,-1.38,-0.87,0.43,-0.59,0.32,1.0],[6.77,9,-0.22,0.11,-1.27,-0.87,0.43,-0.58,0.31,1.0],[6.79,9,-0.26,-0.33,-1.3,-0.87,0.43,-0.58,0.34,1.0],[6.81,9,-0.26,-0.09,-1.24,-0.87,0.43,-0.58,0.33,0.99],[6.83,9,-0.27,-0.11,-1.19,-0.87,0.43,-0.59,0.32,0.99],[6.85,9,-0.24,0.13,-1.06,-0.87,0.43,-0.59,0.33,1.0],[6.87,9,-0.23,0.01,-0.98,-0.87,0.43,-0.6,0.33,1.0],[6.89,9,-0.22,0.03,-0.89,-0.87,0.43,-0.59,0.33,1.0],[6.91,9,-0.19,0.17,-0.76,-0.87,0.43,-0.61,0.33,1.02],[6.93,9,-0.21,0.17,-0.76,-0.87,0.43,-0.61,0.32,1.0],[6.95,9,-0.22,-0.23,-0.77,-0.87,0.43,-0.6,0.33,1.01],[6.97,9,-0.2,0.1,-0.67,-0.87,0.43,-0.61,0.33,1.01],[6.99,9,-0.2,-0.07,-0.62,-0.87,0.43,-0.61,0.35,1.0],[7.01,10,-0.21,-0.2,-0.62,-0.86,0.39,0.0,0.0,0.99],[7.03,10,-0.2,-0.03,-0.56,-0.86,0.33,0.0,0.0,0.99],[7.05,10,-0.23,-0.38,-0.62,-0.86,0.26,0.0,0.0,0.99],[7.07,10,-0.25,-0.3,-0.64,-0.84,0.2,0.0,0.0,1.0],[7.09,10,-0.23,0.01,-0.55,-0.82,0.15,0.0,0.0,1.01],[7.11,10,-0.2,0.1,-0.44,-0.81,0.11,0.0,0.0,1.01],[7.13,10,-0.17,0.15,-0.33,-0.79,0.06,0.0,0.0,1.0],[7.15,10,-0.18,0.15,-0.33,-0.78,0.01,0.0,0.0,0.99],[7.17,10,-0.17,-0.04,-0.28,-0.77,-0.03,0.0,0.0,1.01],[7.19,10,-0.18,-0.21,-0.29,-0.76,-0.08,0.0,0.0,1.01],[7.21,10,-0.19,-0.24,-0.31,-0.76,-0.12,0.0,0.0,1.0],[7.23,10,-0.18,-0.07,-0.27,-0.76,-0.17,0.0,0.0,1.01],[7.25,10,-0.14,0.21,-0.15,-0.76,-0.2,0.0,0.0,1.02],[7.27,10,-0.1,0.26,-0.02,-0.76,-0.24,0.0,0.0,1.0],[7.29,10,-0.09,-0.02,0.01,-0.75,-0.26,0.0,0.0,0.99]];
+  // [ignition height m, fall speed m/s, predicted touchdown m/s, fired?]
+  var VCURVE = [[18.99,-2.45,20.29,0],[18.97,-2.55,20.14,0],[18.94,-2.65,19.98,0],[18.91,-2.75,19.83,0],[18.89,-2.84,19.67,0],[18.86,-2.94,19.51,0],[18.83,-3.04,19.35,0],[18.8,-3.14,19.19,0],[18.76,-3.24,19.03,0],[18.73,-3.33,18.86,0],[18.7,-3.43,18.7,0],[18.66,-3.53,18.53,0],[18.62,-3.63,18.36,0],[18.59,-3.73,18.2,0],[18.55,-3.82,18.02,0],[18.51,-3.92,17.85,0],[18.47,-4.02,17.68,0],[18.43,-4.12,17.5,0],[18.39,-4.22,17.32,0],[18.35,-4.31,17.14,0],[18.3,-4.41,16.96,0],[18.26,-4.51,16.78,0],[18.21,-4.61,16.59,0],[18.17,-4.71,16.4,0],[18.12,-4.81,16.21,0],[18.07,-4.9,16.02,0],[18.02,-5.0,15.83,0],[17.97,-5.1,15.63,0],[17.92,-5.2,15.43,0],[17.86,-5.3,15.23,0],[17.81,-5.39,15.02,0],[17.76,-5.49,14.82,0],[17.7,-5.59,14.61,0],[17.64,-5.69,14.39,0],[17.59,-5.79,14.18,0],[17.53,-5.88,13.95,0],[17.47,-5.98,13.73,0],[17.41,-6.08,13.5,0],[17.35,-6.18,13.27,0],[17.29,-6.28,13.04,0],[17.22,-6.37,12.8,0],[17.16,-6.47,12.55,0],[17.09,-6.57,12.3,0],[17.03,-6.67,12.05,0],[16.96,-6.77,11.79,0],[16.89,-6.86,11.53,0],[16.82,-6.96,11.25,0],[16.75,-7.06,10.98,0],[16.68,-7.16,10.69,0],[16.61,-7.26,10.4,0],[16.54,-7.35,10.09,0],[16.46,-7.45,9.78,0],[16.39,-7.55,9.46,0],[16.31,-7.65,9.13,0],[16.23,-7.75,8.78,0],[16.15,-7.85,8.42,0],[16.07,-7.94,8.05,0],[15.99,-8.04,7.65,0],[15.91,-8.14,7.24,0],[15.83,-8.24,6.8,0],[15.75,-8.34,6.33,0],[15.66,-8.43,5.82,0],[15.58,-8.53,5.26,0],[15.49,-8.63,4.63,0],[15.41,-8.73,3.91,0],[15.32,-8.83,3.01,0],[15.23,-8.92,1.7,0],[15.2,-8.96,0.65,1],[15.14,-9.02,3.07,0],[15.05,-9.12,4.52,0],[14.96,-9.22,5.49,0],[14.87,-9.32,6.25,0],[14.77,-9.41,6.9,0],[14.68,-9.51,7.48,0],[14.58,-9.61,7.98,0],[14.48,-9.71,8.45,0],[14.39,-9.81,8.87,0],[14.29,-9.9,9.27,0],[14.19,-10.0,9.63,0],[14.09,-10.1,9.98,0],[13.99,-10.2,10.32,0],[13.88,-10.3,10.62,0],[13.78,-10.4,10.92,0],[13.68,-10.49,11.2,0],[13.57,-10.59,11.49,0],[13.46,-10.69,11.75,0],[13.36,-10.79,12.01,0],[13.25,-10.89,12.25,0],[13.14,-10.98,12.48,0],[13.03,-11.08,12.72,0],[12.92,-11.18,12.94,0],[12.8,-11.28,13.17,0],[12.69,-11.38,13.37,0],[12.58,-11.47,13.58,0],[12.46,-11.57,13.78,0],[12.35,-11.67,13.99,0],[12.23,-11.77,14.17,0],[12.11,-11.87,14.36,0],[11.99,-11.96,14.55,0],[11.87,-12.06,14.74,0],[11.75,-12.16,14.91,0],[11.63,-12.26,15.11,0],[11.5,-12.36,15.28,0],[11.38,-12.45,15.46,0],[11.25,-12.55,15.64,0],[11.13,-12.65,15.82,0],[11.0,-12.75,15.99,0],[10.87,-12.85,16.18,0],[10.74,-12.94,16.35,0],[10.61,-13.04,16.52,0],[10.48,-13.14,16.71,0],[10.35,-13.24,16.91,0],[10.22,-13.34,17.13,0],[10.08,-13.44,17.36,0],[9.95,-13.53,17.57,0],[9.81,-13.63,17.84,0],[9.68,-13.73,18.08,0],[9.54,-13.83,18.38,0],[9.4,-13.93,18.64,0],[9.26,-14.02,18.91,0],[9.12,-14.12,19.18,0]];
+  var STATE_NAMES = ["IDLE","CALIBRATING","ARMED","COUNTDOWN","IGNITION_WAIT","ASCENT","COAST","DESCENT","LANDING_IGNITION","LANDING_BURN","LANDED","ABORT","TVC_TEST","ERROR"];
+
+  // ---------------- file details ----------------
+  var FILES = {
+    ino: { name: "TVC_Flight_Computer.ino", lines: 846,
+      role: "The brain. The only file that makes decisions: it runs the 2 ms loop, the 14-state flight sequence, the commands, telemetry and logging. Every other file is a toolbox it calls.",
+      inside: ["<code>setup()</code> (line 722): forces pyro pins LOW, starts USB, Serial2, sensors, servos, prints the landing PLAN.", "<code>loop()</code> (line 787): the 15 steps in the next section, every 2 ms.", "<code>runStateMachine()</code> (line 338): one <code>case</code> per state.", "<code>handleCommand()</code> (line 555): ARM, LAUNCH, ABORT, TVCTEST and the rest.", "<code>tryArm()</code> / <code>finishCalibration()</code>: pre-arm checks and the 2 s gyro-bias calibration.", "<code>disarm()</code>, <code>abortFlight()</code>, <code>event()</code>, <code>sendTelemetry()</code>, <code>logRecord()</code>."],
+      talks: ["Calls every header in this project.", "Reads commands from USB <code>Serial</code> and from the ESP32 on <code>Serial2</code>.", "Sends <code>T,</code> and <code>M,</code> lines back out."],
+      settings: ["<code>LOOP_HZ</code>, all the detect thresholds in section 7, <code>COUNTDOWN_S</code>, <code>ONBOARD_ASCENT_IGNITION</code>."],
+      links: ["imu","baro","sim","att","nav","tvc","landing","pyro","log","usb","esp","config","types"] },
+    imu: { name: "imu_mpu6050.h", lines: 67,
+      role: "Driver for the MPU6050 gyro/accelerometer. Talks I²C directly, so no library is needed.",
+      inside: ["<code>begin()</code>: resets the chip and sets ±16 g, ±1000 °/s, 1 kHz sampling, 98 Hz low-pass filter.", "<code>readRaw()</code>: reads 14 bytes and converts to g (÷2048) and °/s (÷32.8), in the chip's own axes.", "<code>whoAmI</code>, <code>saturated</code>: chip ID and an over-range flag."],
+      talks: ["Called only by <code>readImu()</code> in the .ino, which remaps the axes.", "Not used at all in <code>SIM_MODE 1</code>."],
+      settings: ["<code>MPU6050_ADDR</code> (0x68), <code>I2C_CLOCK_HZ</code>, <code>IMU_AXIS_FOR_BODY_*</code> (applied in the .ino)."],
+      links: ["chipImu","ino","config"] },
+    baro: { name: "baro_bmp3xx.h", lines: 101,
+      role: "Driver for your BMP388 barometer (BMP390 also works). It never waits for the sensor, so it can't slow the loop.",
+      inside: ["<code>begin()</code>: checks chip ID 0x50, reads the factory calibration numbers, sets 50 Hz, ×8 oversampling, no internal filter.", "<code>poll()</code>: returns true only when a new sample is ready, then applies Bosch's compensation formula to get pascals.", "<code>pressureToAltitude(p, p0)</code>: the standard atmosphere formula, metres above the pad."],
+      talks: ["Called by <code>pollBaro()</code> in the .ino every loop; about 1 in 10 calls gets a sample.", "Not used in <code>SIM_MODE 1</code>."],
+      settings: ["<code>BMP3XX_ADDR</code> (0x77, or 0x76 if SDO is grounded)."],
+      links: ["chipBaro","ino","config"] },
+    sim: { name: "sim.h", lines: 183,
+      role: "A virtual rocket for bench testing. In SIM_MODE 1 it replaces both sensor chips, so the whole flight can run on your desk while the servos really move.",
+      inside: ["<code>step()</code>: 2 ms of physics: thrust curve, gimbal servo lag, mass loss, drag, gusts, roll, gravity, ground contact.", "<code>readImu()</code> / <code>readBaro()</code>: what real sensors would read, plus noise and bias.", "Igniter delay with random jitter, the E16-4 ejection-charge kick, and a printed <code>SIM: TOUCHDOWN</code> report."],
+      talks: ["Receives the commanded gimbal angles and the pyro <code>hasFired</code> flags from the .ino each loop.", "Uses <code>motor_curves.h</code> for both motors."],
+      settings: ["Everything starting <code>SIM_</code> in section 10, plus <code>LIFTOFF_MASS_KG</code>."],
+      links: ["ino","curves","config","types"] },
+    att: { name: "attitude.h", lines: 48,
+      role: "Keeps track of which way the rocket points, and turns that into the two tilt angles the gimbal cares about.",
+      inside: ["<code>q</code>: the attitude quaternion. <code>gyroBiasDps</code>, <code>accelScale</code>: set by calibration.", "<code>update()</code>: integrates the gyro; on the ground, also nudges toward gravity.", "<code>tiltXDeg()</code>, <code>tiltYDeg()</code>, <code>tiltDeg()</code>: tilt about each gimbal axis and in total.", "<code>verticalAccel()</code>: acceleration straight up, gravity removed, for the altitude filter."],
+      talks: ["Called by the .ino every loop. Results go to <code>tvc.h</code> (via the .ino), the abort checks, and <code>nav_filter.h</code>."],
+      settings: ["None directly. Accuracy depends on keeping still during ARM calibration."],
+      links: ["ino","types"] },
+    nav: { name: "nav_filter.h", lines: 77,
+      role: "A 3-state Kalman filter for altitude, vertical speed and accelerometer bias. Its speed estimate is what times the landing burn.",
+      inside: ["<code>predict(accUp, dt)</code>: the fast step, every 2 ms.", "<code>updateBaro(z)</code>: the correction, 50 times a second. Rejects jumps over 4 m.", "<code>reset(h0)</code>: used on the pad so altitude starts at exactly 0.", "<code>h</code>, <code>v</code>, <code>b</code>: the outputs; <code>P</code>: how sure the filter is."],
+      talks: ["Called by the .ino. <code>nav.h</code> and <code>nav.v</code> feed apogee detection, leg deploy and <code>landing.h</code>."],
+      settings: ["Tuning lives in the class itself: <code>accelNoise</code>, <code>baroVar</code>, <code>gateM</code>."],
+      links: ["ino"] },
+    tvc: { name: "tvc.h", lines: 62,
+      role: "Thrust vector control: a PID controller per axis that turns tilt into a gimbal angle, then into a servo pulse.",
+      inside: ["<code>update(tiltX, tiltY, rateX, rateY, dt, integrate)</code>: the PID.", "<code>setGimbal(gx, gy)</code>: caps total deflection, converts degrees to microseconds, writes both servos.", "<code>center()</code>, <code>resetIntegral()</code>.", "<code>servoWriteUs()</code>: Teensy hardware PWM, 15-bit resolution (0.6 µs steps at 50 Hz)."],
+      talks: ["Called by the .ino in ASCENT, LANDING_BURN and TVC_TEST; <code>center()</code> in every other state.", "Drives servo pins 2 and 3."],
+      settings: ["<code>TVC_KP/KI/KD</code>, <code>TVC_MAX_GIMBAL_DEG</code>, <code>TVC_I_LIMIT_DEG</code>, all the <code>SERVO_*</code> values, <code>GIMBAL_TO_SERVO_RATIO</code>."],
+      links: ["ino","servos","config","types"] },
+    landing: { name: "landing.h", lines: 128,
+      role: "Decides the moment to light the landing motor by simulating the outcome of firing now versus one loop later.",
+      inside: ["<code>predictIgnitionNow()</code>: igniter delay, thrust curve, mass loss, drag, touchdown, hop. Returns the worst touchdown speed.", "<code>landingFireDecision()</code>: fire when waiting would be worse. Refuses if it would stop more than 3 m up.", "<code>simulateDrop()</code> / <code>printLandingPlan()</code>: the PLAN table of best apogee for your mass."],
+      talks: ["Asked by the .ino every loop in DESCENT. Never fires anything itself: it only answers yes or no."],
+      settings: ["<code>IGNITER_DELAY_S</code>, <code>LANDING_DRAG_CDA_M2</code>, <code>LANDING_AIM_ALT_M</code>, <code>LANDING_MAX_STOP_ALT_M</code>, <code>LIFTOFF_MASS_KG</code>, <code>LANDING_PROP_MASS_KG</code>."],
+      links: ["ino","curves","config","types"] },
+    pyro: { name: "pyro.h", lines: 69,
+      role: "The igniter channels. Small on purpose, because this is the file that can light a motor.",
+      inside: ["<code>g_pyroArmed</code>: the software arm flag.", "<code>begin()</code>: drives the gate LOW before anything else.", "<code>fire()</code>: refuses unless armed and not fired before; in SIM_MODE never drives HIGH.", "<code>update()</code>: turns it off after <code>PYRO_FIRE_MS</code>. <code>readDividedVolts()</code>: rail and continuity sense."],
+      talks: ["The .ino calls <code>fire()</code> at T-0 (ascent) and on the landing decision (landing).", "MOSFET gates on pins 5 and 6."],
+      settings: ["<code>PIN_PYRO_*</code>, <code>PYRO_FIRE_MS</code>, the divider ratios, <code>ARM_MIN_VOLTS</code>."],
+      links: ["ino","igniters","config"] },
+    log: { name: "flight_log.h", lines: 95,
+      role: "Records the flight. Writes to RAM during flight and to the SD card only after landing, because SD cards can freeze for 100+ ms mid-write.",
+      inside: ["<code>LogRecord</code>: 18 values, 64 bytes.", "<code>add()</code>: into a 40 s ring buffer in DMAMEM (256 KB).", "<code>addEvent()</code>: every <code>M,</code> message, as text.", "<code>saveToSD()</code>: <code>FLTnnn.CSV</code> (data) and <code>FLTnnn.TXT</code> (events)."],
+      talks: ["The .ino adds a record every 5th loop (100 Hz) and calls <code>saveToSD()</code> in LANDED or ABORT."],
+      settings: ["<code>LOG_HZ</code>, <code>LOG_SECONDS</code>."],
+      links: ["ino","sd","config"] },
+    esp: { name: "ESP32_Ground_Link.ino", lines: 174,
+      role: "A separate sketch for the ESP32 board. It creates the Wi-Fi network TVC-ROCKET and a web page at 192.168.4.1, and relays text between the phone and the Teensy.",
+      inside: ["<code>handleData()</code>: the page polls this every 250 ms; it also sends <code>HB</code> to the Teensy.", "<code>handleCmd()</code>: forwards only whitelisted commands.", "<code>handleLine()</code>: keeps the latest <code>T,</code> line and the last 30 <code>M,</code> lines."],
+      talks: ["UART at 460800 baud: ESP32 GPIO17 → Teensy pin 7, Teensy pin 8 → ESP32 GPIO16, shared ground."],
+      settings: ["<code>AP_SSID</code>, <code>AP_PASS</code> at the top of the sketch. Change the password."],
+      links: ["ino","phone"] },
+    config: { name: "config.h", lines: 205,
+      role: "Every number you are meant to change, in ten numbered sections. Every other file includes it, so a change here affects the whole build.",
+      inside: ["1 Mode · 2 Pins · 3 Battery and arming · 4 Sensors and IMU mounting · 5 Rocket mass · 6 TVC and servos · 7 Flight logic · 8 Landing burn and legs · 9 Logging · 10 Simulator."],
+      talks: ["Read at compile time by every file. Nothing writes to it while running."],
+      settings: ["All of them. See the table further down this page."],
+      links: ["ino","imu","baro","sim","tvc","landing","pyro","log"] },
+    types: { name: "flight_types.h", lines: 111,
+      role: "The shared vocabulary: state names and small 3D math helpers.",
+      inside: ["<code>FlightState</code> enum and <code>stateName()</code>.", "<code>Vec3</code> with <code>dot</code>, <code>cross</code>, <code>norm</code>.", "<code>Quat</code> with <code>qmul</code>, <code>qrotate</code>, <code>qrotateInv</code>, <code>qintegrate</code>, <code>qFromUpVector</code>.", "<code>G0</code> (9.80665), <code>DEG2RAD</code>, <code>clampf()</code>."],
+      talks: ["Included by attitude.h, tvc.h, landing.h, sim.h and the .ino."],
+      settings: ["None."],
+      links: ["ino","att","tvc","landing","sim"] },
+    curves: { name: "motor_curves.h", lines: 67,
+      role: "The E16 thrust curve as a table of {time, newtons}, rebuilt from the NAR certification numbers (33.4 N·s, 26.4 N peak, 2.09 s).",
+      inside: ["<code>E16_CURVE</code>: 23 points.", "<code>ThrustCurve</code>: works out <code>totalImpulse</code> and <code>burnTime</code>; <code>thrustAt(t)</code> interpolates."],
+      talks: ["Used by <code>landing.h</code> to predict the landing burn and by <code>sim.h</code> to fly the virtual motors."],
+      settings: ["<code>ASCENT_CURVE</code>, <code>LANDING_CURVE</code>. Paste the real .eng data from thrustcurve.org here."],
+      links: ["landing","sim"] }
+  };
+
+  var STATES = {
+    IDLE: { what: ["Gimbal centred, pyros disarmed.", "Attitude kept true with gravity; altitude held at 0; ground pressure follows the weather."],
+      exits: ["<code>ARM</code>: rail ≥ 6.4 V, igniters show continuity, tilt under 10° → CALIBRATING", "<code>TVCTEST</code> → TVC_TEST"], code: "case ST_IDLE · tryArm()" },
+    CALIBRATING: { what: ["Keep the rocket still for 2 s.", "Averages the gyro (bias), the accelerometer (scale and which way is up) and the pressure (ground reference P0)."],
+      exits: ["Done and steady → ARMED: software arm on, log starts recording", "Moved, noisy, or too few baro samples → IDLE"], code: "case ST_CALIBRATING · finishCalibration()" },
+    ARMED: { what: ["Pyros armed. Chirps every 2 s.", "Slowly refines the gyro bias while still."],
+      exits: ["<code>LAUNCH</code> → COUNTDOWN", "Lift-off detected (external launch controller) → ASCENT", "ARM switch off, tipped over 10°, or 10 minutes → IDLE, disarmed"], code: "case ST_ARMED" },
+    COUNTDOWN: { what: ["10 s, sends T-10 … T-1 and beeps each second.", "If started from the phone, checks the heartbeat every loop."],
+      exits: ["T-0 → <code>pyroAscent.fire()</code> → IGNITION_WAIT", "<code>ABORT</code>/<code>DISARM</code>, heartbeat lost 2 s, tipped, ARM switch off → IDLE"], code: "case ST_COUNTDOWN" },
+    IGNITION_WAIT: { what: ["Igniter 1 is powered for 1 s.", "Watches for more than 1.5 g along the nose for 50 ms."],
+      exits: ["Lift-off → ASCENT", "Nothing in 3 s → IDLE: MISFIRE, wait 60 s before approaching"], code: "case ST_IGNITION_WAIT · onLiftoff()" },
+    ASCENT: { what: ["Gimbal steering: <code>tvc.update()</code> every 2 ms.", "Altitude filter tracking the climb."],
+      exits: ["Under 0.4 g for 60 ms (after 0.5 s), or 2.6 s → COAST", "Tilt over 30° → ABORT"], code: "case ST_ASCENT" },
+    COAST: { what: ["Gimbal centred: no thrust, nothing to steer with.", "Accelerometer shocks over 1 g are ignored."],
+      exits: ["Velocity below 0 for 100 ms, or 2 m below max height, or 8 s → DESCENT (apogee)", "Tilt over 30° → ABORT"], code: "case ST_COAST" },
+    DESCENT: { what: ["<code>landingFireDecision()</code> every 2 ms.", "Releases the legs below 8 m."],
+      exits: ["Fire decision and tilt ≤ 15° → <code>pyroLanding.fire()</code> → LANDING_IGNITION", "Tilted over 15° at that moment, or tumbling over 30° → ABORT", "Comes to rest without needing to fire → LANDED"], code: "case ST_DESCENT · landing.h" },
+    LANDING_IGNITION: { what: ["Igniter 2 is powered; legs released.", "Gimbal centred until thrust appears."],
+      exits: ["Over 1.3 g for 60 ms → LANDING_BURN (logs the measured delay)", "Nothing in 0.7 s → ABORT"], code: "case ST_LANDING_IGNITION" },
+    LANDING_BURN: { what: ["Gimbal steering again (if the landing motor is in the gimbal)."],
+      exits: ["About 1 g and under 20 °/s for 0.5 s → LANDED", "Tipped over 60° → LANDED", "Burn time + 6 s → LANDED"], code: "case ST_LANDING_BURN" },
+    LANDED: { what: ["Gimbal centred. Disarms after 1 s.", "Saves the log to SD after 1.5 s. Locator beeps."],
+      exits: ["<code>RESET</code> → IDLE"], code: "case ST_LANDED · saveLog()" },
+    ABORT: { what: ["Gimbal centred. The landing motor will never be lit.", "Backup parachute fires once, if <code>PIN_PYRO_BACKUP</code> is set."],
+      exits: ["Saves the log when still for 1 s or after 20 s", "<code>RESET</code> → IDLE"], code: "abortFlight() · case ST_ABORT" },
+    TVC_TEST: { what: ["The real controller runs on live sensor data with no integral term.", "Prints tilt and gimbal 5 times a second. Tilt the rocket by hand: the nozzle must swing opposite the lean."],
+      exits: ["<code>STOP</code> → IDLE"], code: "case ST_TVC_TEST" },
+    ERROR: { what: ["Boot found a missing sensor or an IMU axis mapping that isn't right-handed.", "Only STATUS and HELP are useful."],
+      exits: ["Fix the wiring or config and power-cycle"], code: "setup()" }
+  };
+
+  function $(id) { return document.getElementById(id); }
+  function esc(s) { return String(s); }
+
+  // ---------------- file map interaction ----------------
+  var fileSvg = $("filemap");
+  var selFile = "ino";
+  var simMode = true;
+  function renderFilePanel(id) {
+    var f = FILES[id], p = $("filepanel");
+    if (!f) return;
+    var html = "<h3>" + f.name + " <span class=\"hint\" style=\"font-family:var(--font-body)\">· " + f.lines + " lines</span></h3>";
+    html += "<p class=\"role\">" + f.role + "</p>";
+    html += "<div><h4>What's inside</h4><ul>" + f.inside.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
+    html += "<div><h4>Talks to</h4><ul>" + f.talks.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul>";
+    html += "<h4>Settings that matter</h4><ul>" + f.settings.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
+    p.innerHTML = html;  // static content written above, no user data
+  }
+  function applyFileState() {
+    var f = FILES[selFile] || { links: [] };
+    var rel = {};
+    (f.links || []).forEach(function (k) { rel[k] = true; });
+    fileSvg.querySelectorAll(".node").forEach(function (n) {
+      var id = n.getAttribute("data-id");
+      var off = (simMode && n.getAttribute("data-real") === "1" && id !== "igniters") || (!simMode && n.getAttribute("data-sim") === "1");
+      n.classList.toggle("off", !!off);
+      n.classList.toggle("sel", id === selFile);
+      n.classList.toggle("rel", !!rel[id] && id !== selFile);
+    });
+    fileSvg.querySelectorAll(".edge").forEach(function (e) {
+      var a = e.getAttribute("data-a"), b = e.getAttribute("data-b");
+      var off = (simMode && e.getAttribute("data-real") === "1") || (!simMode && e.getAttribute("data-sim") === "1");
+      var on = !off && (a === selFile || b === selFile);
+      e.classList.toggle("off", !!off);
+      e.classList.toggle("on", on);
+      e.querySelectorAll("path").forEach(function (p) {
+        if (p.hasAttribute("marker-end")) p.setAttribute("marker-end", on ? "url(#ahon)" : "url(#ah)");
+        if (p.hasAttribute("marker-start")) p.setAttribute("marker-start", on ? "url(#ahon)" : "url(#ah)");
+      });
+    });
+    var lbl = $("pyro-edge-lbl");
+    lbl.textContent = simMode ? "held LOW" : "gate";
+    $("e-pyro-ign").classList.toggle("off", simMode && selFile !== "pyro");
+    $("mode-sim").setAttribute("aria-pressed", simMode ? "true" : "false");
+    $("mode-real").setAttribute("aria-pressed", simMode ? "false" : "true");
+  }
+  fileSvg.querySelectorAll(".node.click").forEach(function (n) {
+    function pick() { selFile = n.getAttribute("data-id"); renderFilePanel(selFile); applyFileState(); }
+    n.addEventListener("click", pick);
+    n.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } });
+  });
+  $("mode-sim").addEventListener("click", function () { simMode = true; if (selFile === "imu" || selFile === "baro") { selFile = "sim"; renderFilePanel(selFile); } applyFileState(); });
+  $("mode-real").addEventListener("click", function () { simMode = false; if (selFile === "sim") { selFile = "imu"; renderFilePanel(selFile); } applyFileState(); });
+  renderFilePanel(selFile);
+  applyFileState();
+
+  // ---------------- state map interaction ----------------
+  var stSvg = $("statemap");
+  var selState = "DESCENT";
+  function renderStatePanel(id) {
+    var s = STATES[id], p = $("statepanel");
+    var html = "<h3>" + id + "</h3><p class=\"role\">Code: <code>" + s.code + "</code></p>";
+    html += "<div><h4>Every 2 ms in this state</h4><ul>" + s.what.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
+    html += "<div><h4>Leaves when</h4><ul>" + s.exits.map(function (x) { return "<li>" + x + "</li>"; }).join("") + "</ul></div>";
+    p.innerHTML = html;
+  }
+  function applyStateSel() {
+    stSvg.querySelectorAll(".node").forEach(function (n) { n.classList.toggle("sel", n.getAttribute("data-id") === selState); });
+    stSvg.querySelectorAll(".edge").forEach(function (e) {
+      var from = (e.getAttribute("data-from") || "").split(" ");
+      var on = from.indexOf(selState) >= 0;
+      e.classList.toggle("on", on);
+      e.querySelectorAll("path").forEach(function (p) { p.setAttribute("marker-end", on ? "url(#sahon)" : "url(#sah)"); });
+    });
+  }
+  stSvg.querySelectorAll(".node.click").forEach(function (n) {
+    function pick() { selState = n.getAttribute("data-id"); renderStatePanel(selState); applyStateSel(); }
+    n.addEventListener("click", pick);
+    n.addEventListener("keydown", function (ev) { if (ev.key === "Enter" || ev.key === " ") { ev.preventDefault(); pick(); } });
+  });
+  renderStatePanel(selState);
+  applyStateSel();
+
+  // ---------------- charts ----------------
+  var NS = "http://www.w3.org/2000/svg";
+  function mk(tag, attrs, parent, text) {
+    var e = document.createElementNS(NS, tag);
+    for (var k in attrs) e.setAttribute(k, attrs[k]);
+    if (text != null) e.textContent = text;
+    if (parent) parent.appendChild(e);
+    return e;
+  }
+  function ticks(min, max, n) {
+    var step0 = (max - min) / n, mag = Math.pow(10, Math.floor(Math.log10(step0))), r = step0 / mag;
+    var step = (r < 1.5 ? 1 : r < 3 ? 2 : r < 7 ? 5 : 10) * mag, out = [];
+    for (var v = Math.ceil(min / step - 1e-9) * step; v <= max + 1e-9; v += step) out.push(Math.round(v * 1e6) / 1e6);
+    return out;
+  }
+  function fmt(v, d) { var s = v.toFixed(d); return s.replace("-", "−"); }
+
+  // generic line chart; returns an object with setCursor(i)/clearCursor()
+  function lineChart(host, cfg) {
+    var W = Math.max(300, host.clientWidth), H = cfg.height;
+    var m = { l: 44, r: 14, t: cfg.top || 10, b: cfg.xAxis ? 26 : 8 };
+    host.textContent = "";
+    var svg = mk("svg", { viewBox: "0 0 " + W + " " + H, width: W, height: H, "aria-hidden": "true" }, host);
+    var x0 = cfg.xDomain[0], x1 = cfg.xDomain[1], y0 = cfg.yDomain[0], y1 = cfg.yDomain[1];
+    function X(v) { return m.l + (v - x0) / (x1 - x0) * (W - m.l - m.r); }
+    function Y(v) { return m.t + (1 - (v - y0) / (y1 - y0)) * (H - m.t - m.b); }
+    var rows = cfg.rows;
+    // TVC bands
+    if (cfg.bands) {
+      var start = null;
+      rows.forEach(function (r, i) {
+        var tvcOn = r[1] === 5 || r[1] === 9;
+        if (tvcOn && start === null) start = r[0];
+        var endRun = start !== null && (!tvcOn || i === rows.length - 1);
+        if (endRun) { mk("rect", { class: "band", x: X(start), y: m.t, width: Math.max(1, X(r[0]) - X(start)), height: H - m.t - m.b }, svg); start = null; }
+      });
+      if (cfg.bandLabels) {
+        var runs = [], cur = null;
+        rows.forEach(function (r) { if (!cur || cur.s !== r[1]) { cur = { s: r[1], a: r[0], b: r[0] }; runs.push(cur); } else cur.b = r[0]; });
+        var short = { 4: "IGN WAIT", 5: "ASCENT", 6: "COAST", 7: "DESCENT", 8: "IGN 2", 9: "LANDING BURN", 10: "LANDED" };
+        runs.forEach(function (rn) {
+          var w = X(rn.b) - X(rn.a), lbl = short[rn.s] || "";
+          if (w > lbl.length * 6.4) mk("text", { class: "bandlbl", x: (X(rn.a) + X(rn.b)) / 2, y: m.t - 6, "text-anchor": "middle" }, svg, lbl);
+        });
+      }
+    }
+    // grid + y ticks
+    var g = mk("g", { class: "grid" }, svg), ax = mk("g", { class: "axis" }, svg);
+    ticks(y0, y1, cfg.yTicks || 4).forEach(function (v) {
+      mk("line", { x1: m.l, x2: W - m.r, y1: Y(v), y2: Y(v) }, v === 0 ? ax : g);
+      mk("text", { x: m.l - 8, y: Y(v) + 4, "text-anchor": "end", class: "tick" }, svg, fmt(v, cfg.yDec || 0));
+    });
+    if (cfg.xAxis) {
+      ticks(Math.min(x0, x1), Math.max(x0, x1), cfg.xTicks || 8).forEach(function (v) {
+        mk("text", { x: X(v), y: H - 8, "text-anchor": "middle", class: "tick" }, svg, fmt(v, cfg.xDec || 0) + (cfg.xUnit || ""));
+      });
+    }
+    // events
+    (cfg.events || []).forEach(function (ev) {
+      var ly = 11 + (ev.row || 0) * 13;
+      mk("line", { class: "evt", x1: X(ev.t), x2: X(ev.t), y1: cfg.eventLabels ? ly - 9 : m.t, y2: H - m.b }, svg);
+      if (cfg.eventLabels) mk("text", { class: "evtlbl", x: X(ev.t) + 4, y: ly }, svg, ev.label);
+    });
+    // lines
+    cfg.series.forEach(function (s) {
+      var d = "";
+      rows.forEach(function (r, i) { var v = s.get(r); if (v == null) return; d += (d ? "L" : "M") + X(cfg.x(r)).toFixed(1) + "," + Y(Math.max(y0, Math.min(y1, v))).toFixed(1); });
+      mk("path", { class: "line " + s.cls, d: d }, svg);
+    });
+    // annotations
+    (cfg.anns || []).forEach(function (a) {
+      var px = X(a.x), py = Y(a.y);
+      if (a.dot) { mk("circle", { cx: px, cy: py, r: 6, class: "dot-ring" }, svg); mk("circle", { cx: px, cy: py, r: 4, class: a.dot }, svg); }
+      var tx = px + (a.dx || 0), ty = py + (a.dy || 0);
+      if (a.leader) mk("path", { class: "leader", d: "M" + px + "," + py + " L" + tx + "," + (ty - 4) }, svg);
+      mk("text", { class: "ann", x: tx, y: ty, "text-anchor": a.anchor || "start" }, svg, a.text);
+      if (a.sub) mk("text", { class: "ann-sub", x: tx, y: ty + 14, "text-anchor": a.anchor || "start" }, svg, a.sub);
+    });
+    // cursor layer
+    var cur = mk("g", { style: "display:none" }, svg);
+    var cl = mk("line", { class: "cursor", y1: m.t, y2: H - m.b }, cur);
+    var dots = cfg.series.map(function (s) { mk("circle", { r: 6, class: "dot-ring" }, cur); return mk("circle", { r: 4, class: s.cls.replace("s", "f") }, cur); });
+    var rings = cur.querySelectorAll(".dot-ring");
+    var hit = mk("rect", { x: m.l, y: 0, width: W - m.l - m.r, height: H, fill: "transparent" }, svg);
+    function idxAt(px) {
+      var v = x0 + (px - m.l) / (W - m.l - m.r) * (x1 - x0), best = 0, bd = 1e9;
+      for (var i = 0; i < rows.length; i++) { var dd = Math.abs(cfg.x(rows[i]) - v); if (dd < bd) { bd = dd; best = i; } }
+      return best;
+    }
+    var api = {
+      setCursor: function (i) {
+        var r = rows[i]; if (!r) return;
+        cur.style.display = "";
+        var px = X(cfg.x(r)); cl.setAttribute("x1", px); cl.setAttribute("x2", px);
+        cfg.series.forEach(function (s, k) { var v = s.get(r); var py = Y(Math.max(y0, Math.min(y1, v))); dots[k].setAttribute("cx", px); dots[k].setAttribute("cy", py); rings[k].setAttribute("cx", px); rings[k].setAttribute("cy", py); });
+      },
+      clearCursor: function () { cur.style.display = "none"; },
+      xPx: function (i) { return X(cfg.x(rows[i])); }
+    };
+    hit.addEventListener("pointermove", function (ev) {
+      var b = svg.getBoundingClientRect(); var px = (ev.clientX - b.left) * (W / b.width);
+      if (cfg.onHover) cfg.onHover(idxAt(px), ev);
+    });
+    hit.addEventListener("pointerleave", function () { if (cfg.onLeave) cfg.onLeave(); });
+    return api;
+  }
+
+  function tipRow(cls, value, label) {
+    var row = document.createElement("div"); row.className = "row";
+    if (cls) { var i = document.createElement("i"); i.className = cls; row.appendChild(i); }
+    var b = document.createElement("b"); b.textContent = value; row.appendChild(b);
+    var s = document.createElement("span"); s.textContent = label; row.appendChild(s);
+    return row;
+  }
+  function placeTip(tip, box, px, py) {
+    var bw = box.clientWidth, tw = tip.offsetWidth || 180;
+    var left = px + 14; if (left + tw > bw - 8) left = px - tw - 14; if (left < 8) left = 8;
+    tip.style.left = left + "px"; tip.style.top = Math.max(8, py) + "px";
+  }
+
+  var EVENTS = [
+    { t: -0.49, label: "igniter 1 on", row: 0 }, { t: 0.0, label: "lift-off", row: 1 },
+    { t: 1.92, label: "burnout", row: 0 }, { t: 3.10, label: "apogee", row: 1 },
+    { t: 3.92, label: "fire motor 2", row: 0 }, { t: 4.43, label: "lit", row: 1 },
+    { t: 6.49, label: "touchdown", row: 0 }
+  ];
+  var flightCharts = [], kalChart = null, vChart = null;
+  var tipF = $("flight-tip"), boxF = tipF.parentNode;
+
+  function flightHover(i, ev) {
+    flightCharts.forEach(function (c) { c.setCursor(i); });
+    var r = FLIGHT[i];
+    tipF.textContent = "";
+    var tt = document.createElement("div"); tt.className = "tt"; tt.textContent = "t = " + fmt(r[0], 2) + " s · " + STATE_NAMES[r[1]]; tipF.appendChild(tt);
+    tipF.appendChild(tipRow(null, fmt(r[2], 2) + " m", "altitude"));
+    tipF.appendChild(tipRow(null, fmt(r[4], 2) + " m/s", "vertical speed"));
+    tipF.appendChild(tipRow("k1", fmt(r[5], 2) + "°", "tilt X"));
+    tipF.appendChild(tipRow("k2", fmt(r[7], 2) + "°", "gimbal X"));
+    tipF.hidden = false;
+    var b = boxF.getBoundingClientRect();
+    placeTip(tipF, boxF, ev.clientX - b.left, ev.clientY - b.top - 40);
+  }
+  function flightLeave() { flightCharts.forEach(function (c) { c.clearCursor(); }); tipF.hidden = true; }
+
+  function drawFlight() {
+    var common = { rows: FLIGHT, x: function (r) { return r[0]; }, xDomain: [-0.5, 7.3], bands: true, events: EVENTS, onHover: flightHover, onLeave: flightLeave };
+    flightCharts = [
+      lineChart($("c-alt"), Object.assign({}, common, { height: 250, top: 46, yDomain: [0, 22], yTicks: 4, bandLabels: true, eventLabels: true,
+        series: [{ cls: "s1", get: function (r) { return r[2]; } }],
+        anns: [{ x: 3.10, y: 19.30, dot: "f1", text: "apogee 19.3 m", dx: -10, dy: -8, anchor: "end" }, { x: 3.92, y: 15.24, dot: "f1", text: "fired at 15.2 m", sub: "falling 9.0 m/s", dx: -10, dy: 20, anchor: "end" }] })),
+      lineChart($("c-vel"), Object.assign({}, common, { height: 170, yDomain: [-14, 14], yTicks: 4,
+        series: [{ cls: "s1", get: function (r) { return r[4]; } }],
+        anns: [{ x: 3.92, y: -8.96, dot: "f1", text: "−9.0 m/s", dx: -10, dy: 4, anchor: "end" }] })),
+      lineChart($("c-tilt"), Object.assign({}, common, { height: 190, yDomain: [-2, 2], yTicks: 4, yDec: 0, xAxis: true, xUnit: " s",
+        series: [{ cls: "s1", get: function (r) { return r[5]; } }, { cls: "s2", get: function (r) { return r[7]; } }] }))
+    ];
+    // keyboard: arrow keys walk the cursor
+    ["c-alt", "c-vel", "c-tilt"].forEach(function (id) {
+      var host = $(id), idx = 0;
+      host.onkeydown = function (ev) {
+        if (ev.key !== "ArrowRight" && ev.key !== "ArrowLeft") return;
+        ev.preventDefault(); idx = Math.max(0, Math.min(FLIGHT.length - 1, idx + (ev.key === "ArrowRight" ? 5 : -5)));
+        var b = host.getBoundingClientRect(), bb = boxF.getBoundingClientRect();
+        flightHover(idx, { clientX: b.left + flightCharts[0].xPx(idx) * (b.width / Math.max(300, host.clientWidth)), clientY: b.top + 40 });
+      };
+      host.onblur = flightLeave;
+    });
+  }
+
+  var KAL = FLIGHT.filter(function (r) { return r[0] >= 3.0 && r[0] <= 6.6; });
+  var tipK = $("kal-tip");
+  function drawKal() {
+    kalChart = lineChart($("c-kal"), { rows: KAL, x: function (r) { return r[0]; }, xDomain: [3.0, 6.6], yDomain: [-10, 20], yTicks: 3, height: 250, xAxis: true, xUnit: " s", xDec: 1, xTicks: 6, bands: true,
+      series: [{ cls: "s1", get: function (r) { return r[2]; } }, { cls: "s2", get: function (r) { return r[3]; } }],
+      anns: [{ x: 5.95, y: -5.81, text: "ejection-charge spike, rejected", sub: "more than 4 m from the prediction", dx: -14, dy: -4, anchor: "end" }],
+      onHover: function (i, ev) {
+        kalChart.setCursor(i); var r = KAL[i]; tipK.textContent = "";
+        var tt = document.createElement("div"); tt.className = "tt"; tt.textContent = "t = " + fmt(r[0], 2) + " s · " + STATE_NAMES[r[1]]; tipK.appendChild(tt);
+        tipK.appendChild(tipRow("k1", fmt(r[2], 2) + " m", "filter"));
+        tipK.appendChild(tipRow("k2", fmt(r[3], 2) + " m", "raw barometer"));
+        tipK.hidden = false; var b = tipK.parentNode.getBoundingClientRect(); placeTip(tipK, tipK.parentNode, ev.clientX - b.left, ev.clientY - b.top - 40);
+      },
+      onLeave: function () { kalChart.clearCursor(); tipK.hidden = true; } });
+  }
+
+  var tipV = $("v-tip");
+  function drawV() {
+    var fired = VCURVE.filter(function (r) { return r[3]; })[0];
+    vChart = lineChart($("c-v"), { rows: VCURVE, x: function (r) { return r[0]; }, xDomain: [19, 9], yDomain: [0, 22], yTicks: 4, height: 260, xAxis: true, xUnit: " m", xTicks: 10,
+      series: [{ cls: "s1", get: function (r) { return r[2]; } }],
+      anns: [
+        { x: fired[0], y: fired[2], dot: "f1", text: "fires here: " + fired[0].toFixed(1) + " m, touchdown " + fired[2].toFixed(2) + " m/s", dx: 16, dy: -10 },
+        { x: 18.6, y: 3.5, text: "too early:", sub: "burns out in the air, then falls" },
+        { x: 12.4, y: 3.5, text: "too late:", sub: "lands with thrust left, hops" }
+      ],
+      onHover: function (i, ev) {
+        vChart.setCursor(i); var r = VCURVE[i]; tipV.textContent = "";
+        var tt = document.createElement("div"); tt.className = "tt"; tt.textContent = "light the igniter at " + fmt(r[0], 2) + " m"; tipV.appendChild(tt);
+        tipV.appendChild(tipRow(null, fmt(r[1], 2) + " m/s", "falling speed then"));
+        tipV.appendChild(tipRow("k1", fmt(r[2], 2) + " m/s", "predicted touchdown"));
+        tipV.hidden = false; var b = tipV.parentNode.getBoundingClientRect(); placeTip(tipV, tipV.parentNode, ev.clientX - b.left, ev.clientY - b.top - 40);
+      },
+      onLeave: function () { vChart.clearCursor(); tipV.hidden = true; } });
+  }
+
+  function drawAll() { drawFlight(); drawKal(); drawV(); }
+  drawAll();
+  var rt = null;
+  window.addEventListener("resize", function () { clearTimeout(rt); rt = setTimeout(drawAll, 120); });
+
+  // data table
+  var tb = $("flight-table").querySelector("tbody");
+  FLIGHT.forEach(function (r) {
+    if (Math.abs(r[0] * 4 - Math.round(r[0] * 4)) > 0.03) return;
+    var tr = document.createElement("tr");
+    [fmt(r[0], 2), STATE_NAMES[r[1]], fmt(r[2], 2), fmt(r[3], 2), fmt(r[4], 2), fmt(r[5], 2), fmt(r[7], 2)].forEach(function (v, k) {
+      var td = document.createElement("td"); td.textContent = v; if (k !== 1) td.className = "num"; tr.appendChild(td);
+    });
+    tb.appendChild(tr);
+  });
+
+  // section rail highlight
+  var links = Array.prototype.slice.call(document.querySelectorAll("#rail a"));
+  var secs = links.map(function (a) { return document.getElementById(a.getAttribute("href").slice(1)); });
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) {
+          var i = secs.indexOf(en.target);
+          links.forEach(function (l, k) { l.classList.toggle("on", k === i); });
+          var a = links[i]; if (a && a.scrollIntoView) { var ol = $("rail"); ol.scrollLeft = a.offsetLeft - 16; }
+        }
+      });
+    }, { rootMargin: "-40% 0px -55% 0px" });
+    secs.forEach(function (s) { if (s) io.observe(s); });
+  }
+  // open the section named in the link, if any
+  if (location.hash && document.getElementById(location.hash.slice(1))) {
+    setTimeout(function () { document.getElementById(location.hash.slice(1)).scrollIntoView(); }, 50);
+  }
+})();
+</script>
+
+</body>
+</html>
